@@ -1,0 +1,44 @@
+/* Layout only — every color, radius and type value comes from tokens.css so the
+   UI inherits the OpenDesign DESIGN.md contract. */
+.shell { max-width: 720px; margin: 0 auto; padding: 64px 24px 96px; }
+.masthead h1 { font-size: 40px; letter-spacing: -0.02em; margin-bottom: 6px; }
+.card {
+  margin-top: 32px;
+  background: var(--color-bg-elevated, #17181a);
+  border: 1px solid var(--color-border, rgba(255,255,255,.08));
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+}
+.row { display: flex; gap: 8px; }
+.field {
+  flex: 1;
+  background: var(--color-bg, #0f1011);
+  color: var(--color-text-primary, #f7f8f8);
+  border: 1px solid var(--color-border, rgba(255,255,255,.08));
+  border-radius: var(--radius-md, 8px);
+  padding: 10px 12px;
+  font: inherit;
+  outline: none;
+}
+.field:focus { border-color: var(--color-accent, #7170ff); }
+.btn, .ghost {
+  font: inherit;
+  border-radius: var(--radius-md, 8px);
+  padding: 10px 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn { background: var(--color-accent, #7170ff); color: #fff; }
+.ghost {
+  background: transparent;
+  color: var(--color-text-secondary, #d0d6e0);
+  border-color: var(--color-border, rgba(255,255,255,.08));
+}
+.list { list-style: none; margin: 20px 0 0; padding: 0; }
+.list-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-top: 1px solid var(--color-border, rgba(255,255,255,.06));
+}
+.muted { color: var(--color-text-tertiary, #8a8f98); }
+.small { font-size: 13px; margin-top: 32px; }
+.error { color: #ff6b6b; margin-top: 12px; }
