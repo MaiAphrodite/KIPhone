@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notewise — Meeting notes that write themselves</title>
+<meta name="description" content="Notewise joins your calls, captures what's said, and turns every meeting into structured notes — live transcription, AI summaries, and action items with owners.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio, geometry.
+   Put this @layer first; product CSS outside the layer wins ordinary layout rules.
+   Native hidden and closed-dialog states take precedence over component display rules. */
+@layer od-layout {
+  [hidden]:not([hidden="until-found" i]) { display: none !important; }
+  dialog:not([open]) { display: none !important; }
+
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+
+  /* containers */
+  .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+  .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+  .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+  .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+  .od-fill    { flex: 1 1 0; min-width: 0; }
+  .od-fixed   { flex: none; }
+  .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+
+  /* stacked information: each piece is its own line — never sibling inline spans */
+  .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+  :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+  .od-tile { display: grid; grid-template-rows: auto 1fr; }
+  :where(.od-tile) > :where(*) { display: block; }
+
+  /* media keeps its intrinsic ratio by default; never a distorted or cropped
+     cover by accident. height:auto lets the ratio win over an <img height="…">
+     attribute. Cropping to a uniform box is an explicit opt-in: set --od-ratio
+     AND add .od-media-cover together (per the core rule, only where a crop is
+     deliberate — tile thumbs, decorative fills — never on full-frame content). */
+  .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+  .od-media-cover { object-fit: cover; }
+
+  /* functional inline SVG icons opt into bounded geometry; content SVGs keep their own */
+  .od-icon { display: inline-block; inline-size: var(--od-icon-size, 1em); block-size: var(--od-icon-size, 1em); flex: none; }
+
+  /* data text only — authored copy is rewritten to its budget instead */
+  .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .od-clamp-2 { -webkit-line-clamp: 2; }
+  .od-clamp-3 { -webkit-line-clamp: 3; }
+  .od-lines-2 { min-height: calc(2 * 1.4em); }   /* block-level reservation for a shared baseline */
+  .od-nowrap  { white-space: nowrap; }           /* 数字+单位 · 价格+起 · 日期+星期 */
+  .od-keep    { word-break: keep-all; overflow-wrap: anywhere; } /* CJK labels break at spaces / <wbr> first */
+
+  /* screen skeleton (optional): bars take their own space, the middle scrolls — no padding guessed for chrome */
+  .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+  .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+
+  /* horizontal rail: the next item peeks at the edge; trailing room survives overflow */
+  .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+             padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+  .od-rail::-webkit-scrollbar { display: none; }
+  :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+  :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+
+  .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+  .od-touch  { min-width: 44px; min-height: 44px; }
+}
+:root [hidden]:where(:not([hidden="until-found" i])) { display: none; }
+/* /OD-LAYOUT-PRIMITIVES v1 */
+
+/* ---------- design tokens ---------- */
+:root {
+  --bg: #08090a;
+  --bg-raised: #0e1013;
+  --bg-raised-hover: #12141a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --hairline: rgba(255, 255, 255, 0.05);
+  --text-primary: #f7f8f8;
+  --text-muted: #8a8f98;
+  --accent: #8f9fe8;
+  --focus-ring: #a5b2ff;
+  --cta-bg: #ffffff;
+  --cta-bg-hover: #e9ebee;
+  --cta-ink: #0a0b0d;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --container: 1024px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: dark; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: rgba(143, 159, 232, 0.35); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+.container { max-width: var(--container); margin-inline: auto; padding-inline: clamp(20px, 5vw, 40px); }
+
+/* ---------- header ---------- */
+.site-header { border-bottom: 1px solid var(--hairline); }
+.site-header .container { display: flex; align-items: center; min-height: 64px; }
+.wordmark {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--text-primary); text-decoration: none;
+  font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+}
+.wordmark svg { display: block; }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  padding-block: clamp(88px, 16vw, 160px) clamp(80px, 12vw, 128px);
+}
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(90% 62% at 50% -12%, rgba(92, 106, 255, 0.17), transparent 68%),
+    radial-gradient(55% 42% at 68% -8%, rgba(56, 189, 248, 0.09), transparent 62%),
+    radial-gradient(48% 40% at 30% -6%, rgba(167, 139, 250, 0.09), transparent 60%);
+}
+.hero-inner {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  max-width: 760px; margin-inline: auto; text-align: center;
+}
+.hero h1 {
+  color: var(--text-primary);
+  font-size: clamp(2.6rem, 1.4rem + 5.2vw, 4.6rem);
+  font-weight: 600; line-height: 1.06; letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.hero-sub {
+  margin-top: var(--space-3); max-width: 560px;
+  font-size: clamp(1.05rem, 1rem + 0.5vw, 1.3rem); line-height: 1.6;
+  text-wrap: pretty;
+}
+.cta {
+  margin-top: 40px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 24px;
+  border: 1px solid var(--cta-bg); border-radius: var(--radius-sm);
+  background: var(--cta-bg); color: var(--cta-ink);
+  font-family: inherit; font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.01em;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color 0.18s var(--ease-out), border-color 0.18s var(--ease-out);
+}
+
+/* ---------- features ---------- */
+.features {
+  border-top: 1px solid var(--hairline);
+  padding-block: clamp(72px, 10vw, 112px) clamp(88px, 12vw, 128px);
+}
+.features-title {
+  color: var(--text-primary); text-align: center;
+  font-size: clamp(1.6rem, 1.3rem + 1.6vw, 2.25rem);
+  font-weight: 600; line-height: 1.15; letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.features-grid {
+  list-style: none;
+  margin-top: clamp(40px, 6vw, 64px);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2);
+}
+.feature {
+  padding: var(--space-3);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  transition: border-color 0.18s var(--ease-out), background-color 0.18s var(--ease-out);
+}
+.feature-icon {
+  display: grid; place-items: center;
+  width: 40px; height: 40px; margin-block: 0 var(--space-2);
+  border: 1px solid var(--border); border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04); color: var(--accent);
+}
+.feature-icon .od-icon { --od-icon-size: 20px; }
+.feature h3 {
+  color: var(--text-primary);
+  font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em;
+}
+.feature p { margin-top: 8px; font-size: 1rem; line-height: 1.65; text-wrap: pretty; }
+
+/* ---------- footer ---------- */
+.site-footer { border-top: 1px solid var(--hairline); padding-block: var(--space-4); }
+.site-footer p { text-align: center; font-size: 0.875rem; }
+
+/* ---------- interaction (pointer devices only) ---------- */
+@media (hover: hover) {
+  .cta:hover { background: var(--cta-bg-hover); border-color: var(--cta-bg-hover); }
+  .feature:hover { border-color: var(--border-strong); background: var(--bg-raised-hover); }
+}
+
+/* ---------- entrance ---------- */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-inner > * { animation: hero-rise 0.4s var(--ease-out) both; }
+.hero-sub { animation-delay: 0.07s; }
+.cta { animation-delay: 0.14s; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 880px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-inner > * { animation: none; }
+  .cta, .feature { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="wordmark" href="#" aria-label="Notewise home">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <rect x="1.5" y="8" width="4" height="6" rx="2" fill="#e6e9f2"/>
+        <rect x="9" y="4" width="4" height="14" rx="2" fill="#8f9fe8"/>
+        <rect x="16.5" y="8" width="4" height="6" rx="2" fill="#e6e9f2"/>
+      </svg>
+      Notewise
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <h1 id="hero-title">Meeting notes that write themselves</h1>
+      <p class="hero-sub">Notewise sits in on your calls, captures what&rsquo;s said, and hands you the summary, decisions, and action items &mdash; before you&rsquo;ve left the room.</p>
+      <a class="cta" href="#">Start for free</a>
+    </div>
+  </section>
+
+  <section class="features" aria-labelledby="features-title">
+    <div class="container">
+      <h2 class="features-title" id="features-title">Everything a meeting needs, after the meeting</h2>
+      <ul class="features-grid" role="list">
+        <li class="feature">
+          <span class="feature-icon">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+            </svg>
+          </span>
+          <h3>Live notes, zero typing</h3>
+          <p>Notewise transcribes the call as it happens, so a complete, searchable record exists the moment you hang up.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 11 12 14 22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </span>
+          <h3>Summaries with owners</h3>
+          <p>Each meeting collapses into a short summary &mdash; the decisions made and the action items, each assigned to a name.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon">
+            <svg class="od-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </span>
+          <h3>Works where you work</h3>
+          <p>Notes sync to your calendar and chat tools, and every past meeting stays searchable in one place.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; 2025 Notewise. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

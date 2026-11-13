@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks'
 import { listItems, createItem, deleteItem } from './lib/api.js'
+import { Landing } from './screens/Landing.jsx'
 import { supabase } from './lib/supabase.js'
 
 export function App() {
@@ -8,6 +9,7 @@ export function App() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
+  const [view, setView] = useState('landing')
 
   async function refresh() {
     try {
@@ -44,6 +46,8 @@ export function App() {
       setError(err.message)
     }
   }
+
+  if (view === 'landing') return <Landing onStart={() => setView('app')} />
 
   return (
     <main class="shell">

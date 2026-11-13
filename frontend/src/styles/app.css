@@ -42,3 +42,7 @@
 .muted { color: var(--color-text-tertiary, #8a8f98); }
 .small { font-size: 13px; margin-top: 32px; }
 .error { color: #ff6b6b; margin-top: 12px; }
+
+/* Landing import from the OpenDesign artifact */
+.features { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 40px; }
+.feature h2 { font-size: 18px; letter-spacing: -0.01em; margin-bottom: 8px; }
