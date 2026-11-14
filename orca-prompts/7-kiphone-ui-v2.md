@@ -1,4 +1,4 @@
-You are the FRONTEND DESIGN worker for Integra. Repo: this worktree (Vite + Preact SPA, no TypeScript, no router library).
+You are the FRONTEND DESIGN worker for KIPhone. Repo: this worktree (Vite + Preact SPA, no TypeScript, no router library).
 
 GOAL: replace the current dark Linear-style UI with a minimalist warm editorial dashboard in the **Anthropic / Claude** aesthetic, with tasteful motion. It must remain a working SPA wired to the live API.
 
@@ -29,7 +29,7 @@ Rules:
 1. **Landing** (`screens/Landing.jsx`) — keep it as the entry view but restyle: serif display headline 'Integritas penyaluran, terlihat.', muted subhead, clay CTA 'Buka dashboard', three short trust lines with hairline separators (not cards). Subtle fade-up on mount.
 
 2. **Dashboard** (`screens/Dashboard.jsx`):
-   - Sticky top bar: serif wordmark `Integra`, muted 'KIP-K disbursement integrity', right-aligned text button 'Muat ulang data contoh'.
+   - Sticky top bar: serif wordmark `KIPhone`, muted 'KIP-K disbursement integrity', right-aligned text button 'Muat ulang data contoh'.
    - Headline block with a one-line summary of what the page shows.
    - **Metrics row**: 4 numbers (Total Record, Temuan, Prioritas Tinggi, Salah Deteksi) separated by vertical hairlines — NOT cards. Small-caps label above, large numeral below, tabular-nums.
    - Action row: clay button 'Jalankan Deteksi', caption with runtime, error text if any.

@@ -1,5 +1,5 @@
 // First screen of the demo. Visual language comes from the OpenDesign artifact
-// (design/landing.html); the copy is Integra's.
+// (design/landing.html); the copy is KIPhone's.
 export function Landing({ onStart, onPublic }) {
   return (
     <main class="shell">
@@ -7,7 +7,7 @@ export function Landing({ onStart, onPublic }) {
         <p class="eyebrow">Integritas penyaluran beasiswa</p>
         <h1>Dana KIP-K cair ke orang yang salah. Sekarang terlihat.</h1>
         <p class="muted">
-          Integra memindai batch penyaluran dan menandai anomali yang bisa
+          KIPhone memindai batch penyaluran dan menandai anomali yang bisa
           dibuktikan — NIK ganda, rekening bersama, nama tidak cocok, penerima
           nonaktif. Model tidak memblokir apa pun. Manusia yang memutuskan.
         </p>

@@ -1,4 +1,4 @@
-You are the QA worker for the Integra hackathon project. Repo: this worktree (Go backend + Preact frontend).
+You are the QA worker for the KIPhone hackathon project. Repo: this worktree (Go backend + Preact frontend).
 
 READ FIRST: PRD.md (sections 4, 7, 9), backend/anomaly.go, backend/jw.go, backend/seed.go, backend/handlers_findings.go.
 

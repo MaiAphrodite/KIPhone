@@ -1,4 +1,4 @@
-import { BAND, STATUS, rulesOf } from '../lib/integra.js'
+import { BAND, STATUS, rulesOf } from '../lib/kiphone.js'
 
 const FILTERS = [
   ['semua', 'Semua'],

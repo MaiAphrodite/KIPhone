@@ -1,4 +1,4 @@
-You are the FRONTEND worker for the Integra hackathon project. Repo: this worktree (Vite + Preact, no TypeScript).
+You are the FRONTEND worker for the KIPhone hackathon project. Repo: this worktree (Vite + Preact, no TypeScript).
 
 READ FIRST: PRD.md (sections 4, 8, 10), frontend/src/app.jsx, frontend/src/lib/api.js, frontend/src/styles/tokens.css, frontend/src/styles/app.css.
 STYLE RULE: use ONLY CSS variables from tokens.css. Never hardcode a hex color. Dark, Linear-like, precise, low-chrome.
@@ -34,7 +34,7 @@ BUILD THESE SCREENS (PRD §8):
    - Event history list at the bottom: "baru -> salah_deteksi · verifikator1 · note · time".
 
 HARD REQUIREMENTS:
-- Keep the existing app.jsx shell working (it has a Landing screen at startup with onStart -> setView('app')). Replace the old items/list demo with the Integra dashboard; the Landing screen can stay as the hero shown first with its CTA leading into the dashboard.
+- Keep the existing app.jsx shell working (it has a Landing screen at startup with onStart -> setView('app')). Replace the old items/list demo with the KIPhone dashboard; the Landing screen can stay as the hero shown first with its CTA leading into the dashboard.
 - Split into files: src/screens/Dashboard.jsx, src/screens/Findings.jsx (or components/), src/lib/integra.js (API calls). Keep each file under ~200 lines.
 - Handle loading, empty, and error states. If the API returns an error, show the message, never a blank screen.
 - No new dependencies. No router library — a simple view state is enough.

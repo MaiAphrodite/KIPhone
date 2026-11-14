@@ -12,7 +12,7 @@ import {
   TRANSITIONS,
   RULE_NAMES,
   EVIDENCE_FIELDS,
-} from '../lib/integra.js'
+} from '../lib/kiphone.js'
 
 function fieldValue(key, value) {
   if (Array.isArray(value)) return value.join(', ')

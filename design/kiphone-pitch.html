@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Integra - pitch deck KIP-K</title>
+  <title>KIPhone - pitch deck KIP-K</title>
   <style>
     /* ===========================================================
        Deck framework: 1920x1080 fixed canvas, scaled to viewport.
@@ -506,6 +506,110 @@
       margin-bottom: 12px;
     }
 
+    /* spending patterns */
+    .patterns {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-top: 38px;
+    }
+    .pattern {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 16px;
+    }
+    .pat-code {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: var(--accent-bright);
+      margin-bottom: 12px;
+    }
+    .pat-weight { color: var(--muted); font-size: 12px; }
+    .pattern h3 {
+      font-size: 21px;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .pattern p {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .txn-bottom {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 56px;
+      margin-top: 38px;
+      align-items: end;
+    }
+    .flow-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 12px;
+    }
+    .flow-step {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .flow-arrow { color: var(--accent-bright); font-size: 16px; }
+    .flow-d {
+      margin-top: 12px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 66ch;
+    }
+    .txn-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      border-top: 1px solid var(--line-strong);
+      padding-top: 14px;
+    }
+    .txn-stats b {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+    }
+    .txn-stats span {
+      display: block;
+      margin-top: 7px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .txn-caveat {
+      margin-top: 26px;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.55;
+      color: var(--meta);
+    }
+
     /* slide 4 */
     .demo-grid {
       display: grid;
@@ -768,12 +872,31 @@
       background: rgba(39, 166, 68, 0.05);
     }
     .anchor-node b { color: #6ee7a0; font-weight: 500; }
+    .feed-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      padding-left: 24px;
+    }
+    .feed-node {
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.4;
+      letter-spacing: 0.03em;
+      color: var(--body);
+      border: 1px dashed var(--line-strong);
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .feed-node b { color: var(--fg); font-weight: 500; }
     .num-strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      margin-top: 34px;
-      padding-top: 24px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+      padding-top: 22px;
       border-top: 1px solid var(--line-strong);
     }
     .num .n {
@@ -935,8 +1058,8 @@
       -->
       <section class="slide active" data-screen-label="01 Trust">
         <header class="topline">
-          <span class="brand"><i class="dot"></i> Integra · KIP-Kuliah</span>
-          <span class="idx">01 / 09</span>
+          <span class="brand"><i class="dot"></i> KIPhone · KIP-Kuliah</span>
+          <span class="idx">01 / 10</span>
         </header>
         <div class="main">
           <div class="trust-grid">
@@ -959,7 +1082,7 @@
               <p class="kicker">Krisis kepercayaan</p>
               <h1 class="hero-mid">Satu screenshot. <span class="accent">Sejuta penerima dihakimi.</span></h1>
               <p class="lede">Mahasiswa KIP-K dipamerkan dengan iPhone 17 Pro Max. Entah postingannya benar atau tidak, percakapannya sudah berubah: dari “apakah dia berhak?” menjadi “semua penerima KIP-K begini.”</p>
-              <p class="punch">Masalahnya bukan iPhone. <span>Masalahnya tidak ada bukti.</span></p>
+              <p class="punch">Masalahnya bukan iPhone. <span>Masalahnya tidak ada yang memeriksa polanya.</span></p>
             </div>
           </div>
         </div>
@@ -974,35 +1097,35 @@
       </section>
 
       <!-- 02 ------------------------------------------------------------
-           SPEAKER: Di balik screenshot ada kasus yang tidak terlihat:
-           identitas dan rekening tidak pernah dicocokkan.
+           SPEAKER: Di balik screenshot ada pola yang tidak terlihat:
+           dana masuk, lalu keluar ke taruhan dan satu agen transfer.
       -->
-      <section class="slide" data-screen-label="02 Ilham">
+      <section class="slide" data-screen-label="02 Pola">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Yang tidak terlihat</span>
-          <span class="idx">02 / 09</span>
+          <span class="idx">02 / 10</span>
         </header>
         <div class="main">
           <div class="hook-grid">
             <div>
               <p class="kicker">Studi kasus · ilustrasi</p>
-              <h1 class="hero-mid">Di balik screenshot, <span class="accent">ada Ilham.</span></h1>
-              <p class="lede">Ilham, mahasiswa KIP-K dari keluarga prasejahtera. Satu NIK terdaftar dua kali. Dana cair ke rekening yang bukan miliknya. Tidak ada yang melihat, karena tidak ada yang mencocokkan.</p>
+              <h1 class="hero-mid">Di balik screenshot, <span class="accent">ada pola.</span></h1>
+              <p class="lede">Ilham, mahasiswa KIP-K. Rp2,4 juta masuk. Dalam sepuluh hari, Rp1,8 juta keluar: taruhan kecil berulang, transfer ke satu agen, dan pembelian di Apple Store. Tidak ada yang melihat, karena kampus tidak pernah menerima mutasi.</p>
             </div>
             <aside class="story">
               <p class="story-k">Yang terjadi</p>
               <ol class="story-list">
-                <li><b>Pagi:</b> SK penerima terbit. Nama Ilham ada di dalamnya.</li>
-                <li><b>Siang:</b> dana cair ke rekening dengan nama pemilik berbeda.</li>
-                <li><b>Audit:</b> Ilham yang harus membuktikan dirinya bukan penerima fiktif.</li>
+                <li><b>Hari 1:</b> dana Rp2,4 juta masuk ke rekening penerima.</li>
+                <li><b>Hari 2-10:</b> taruhan kecil berulang, transfer ke satu agen, pembelian di Apple Store. Saldo menipis.</li>
+                <li><b>Audit:</b> tidak ada jejak dari dana cair ke transaksi. Screenshot bukan bukti.</li>
               </ol>
-              <p class="story-close">Tidak ada jejak dari SK ke rekening. Tidak ada bukti bahwa data tidak diubah.</p>
+              <p class="story-close">Postingan viral melihat satu iPhone. Tidak ada yang melihat 5.411 transaksi.</p>
             </aside>
           </div>
         </div>
         <footer class="foot">
-          <p class="closing-line">Yang viral terlihat. Yang salah tidak.</p>
-          <p class="source">Ilustrasi gabungan dari pola R1-R3 pada data sintetis, bukan kasus nyata.</p>
+          <p class="closing-line">Yang viral terlihat. Polanya tidak.</p>
+          <p class="source">Ilustrasi dari pola T1/T2/T5 pada feed bank dummy, bukan kasus nyata.</p>
         </footer>
       </section>
 
@@ -1013,21 +1136,21 @@
       <section class="slide" data-screen-label="03 Problem">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Masalah</span>
-          <span class="idx">03 / 09</span>
+          <span class="idx">03 / 10</span>
         </header>
         <div class="main">
-          <h2 class="h2">Bukan karena data kurang. <span class="accent">Karena data tidak pernah dicocokkan.</span></h2>
-          <p class="lede" style="margin-top:18px;max-width:86ch;">Postingan viral adalah gejala. Penyakitnya: penerima, rekening, dan status akademik tidak pernah dicocokkan dalam satu baris yang bisa diaudit. Jika ada penyalahgunaan, screenshot tetap bukan bukti.</p>
+          <h2 class="h2">Bukan karena data kurang. <span class="accent">Karena tidak ada yang melihat setelah dana cair.</span></h2>
+          <p class="lede" style="margin-top:18px;max-width:86ch;">Ilham bukan kasus tunggal. Tiga lubang membuat pola seperti ini tidak pernah terdeteksi, dan screenshot mengisi kekosongan.</p>
           <div class="three">
             <article class="prob">
               <p class="n">01</p>
-              <h3>Tidak ada jejak yang menyambung</h3>
-              <p>SK penerima, NIK/NIM, dan rekening hidup di berkas terpisah. Tidak ada satu baris yang bisa ditelusuri dari SK ke rekening.</p>
+              <h3>Tidak ada trace end-to-end</h3>
+              <p>SK, rekening, dan transaksi hidup di sistem berbeda. Tidak ada satu baris dari dana cair ke merchant.</p>
             </article>
             <article class="prob">
               <p class="n">02</p>
-              <h3>Pola fraud klasik lolos</h3>
-              <p>NIK ganda, rekening bersama, nama pemilik tidak cocok, penerima nonaktif. Semua terlihat jika dicocokkan, tapi tidak ada yang mencocokkan.</p>
+              <h3>Pola penyalahgunaan lolos</h3>
+              <p>Taruhan, dana habis 7 hari, tarik tunai terkonsentrasi, barang mewah, transfer berulang ke calo. Semua terlihat dari mutasi, tapi kampus tidak melihat mutasi.</p>
             </article>
             <article class="prob">
               <p class="n">03</p>
@@ -1042,39 +1165,39 @@
       </section>
 
       <!-- 04 ------------------------------------------------------------
-           SPEAKER: Tiga pilar. Sebut scope dengan jelas: penyaluran,
-           bukan konsumsi. Jangan biarkan juri mengira kita mengawasi HP.
+           SPEAKER: Tiga pilar. Trace, detect, prove. Sebut bahwa data
+           mutasi datang dari feed bank mitra, bukan kampus membuka rekening.
       -->
       <section class="slide" data-screen-label="04 Solution">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Solusi</span>
-          <span class="idx">04 / 09</span>
+          <span class="idx">04 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Tiga hal yang harus benar.</h2>
-          <p class="lede" style="margin-top:18px;max-width:64ch;">Kami membangun yang paling kecil yang membuat ketiganya benar. Bukan dashboard besar dengan banyak fitur.</p>
-          <p class="scope"><b>Scope</b> Penyaluran, bukan konsumsi. Kami tidak mendeteksi iPhone atau belanja pribadi.</p>
+          <p class="lede" style="margin-top:18px;max-width:68ch;">Kami membangun yang paling kecil yang membuat ketiganya benar. Satu dashboard untuk penyaluran dan penggunaan dana.</p>
+          <p class="scope"><b>Scope</b> Data mutasi hanya dari feed bank mitra (dummy di demo), bukan kampus membuka rekening. Keputusan tetap manusia.</p>
           <div class="pillars">
             <article class="pillar">
               <p class="pillar-tag">01 · Trace</p>
-              <h3>Temuan tertaut ke baris penyaluran</h3>
-              <p>Setiap temuan membawa SK, NIM, rekening, nominal, tanggal, dan evidence JSON. Bukan tuduhan lepas.</p>
+              <h3>Temuan tertaut ke mahasiswa, rekening, dan transaksi</h3>
+              <p>Setiap temuan membawa identitas, rekening, merchant, nominal, tanggal, dan evidence JSON. Bukan tuduhan lepas.</p>
               <p class="built-k">Sudah jalan</p>
               <ul class="built">
-                <li>join findings + students + accounts</li>
-                <li>evidence per aturan</li>
-                <li>panel bukti di dashboard</li>
+                <li>feed bank mitra + statement view</li>
+                <li>evidence per pola</li>
+                <li>running balance + kategori</li>
               </ul>
             </article>
             <article class="pillar">
               <p class="pillar-tag">02 · Detect</p>
-              <h3>Empat aturan, satu skor</h3>
-              <p>R1 NIK/NIM ganda, R2 rekening bersama, R3 nama tidak cocok, R4 nonaktif menerima. Skor berbobot dengan alasan per aturan.</p>
+              <h3>Empat aturan penyaluran, lima pola penggunaan</h3>
+              <p>R1-R4 untuk siapa yang menerima. T1-T5 untuk ke mana uangnya pergi. Deterministik, dengan alasan per aturan.</p>
               <p class="built-k">Sudah jalan</p>
               <ul class="built">
-                <li>215 record sintetis berlabel</li>
-                <li>15 temuan dalam ~30 ms</li>
-                <li>penjelasan bahasa manusia</li>
+                <li>R1-R4: NIK ganda, rekening, nama, nonaktif</li>
+                <li>T1-T5: taruhan, habis 7 hari, tunai, mewah, calo</li>
+                <li>skor + penjelasan bahasa manusia</li>
               </ul>
             </article>
             <article class="pillar">
@@ -1084,8 +1207,8 @@
               <p class="built-k">Sudah jalan</p>
               <ul class="built">
                 <li>hash deterministik per batch</li>
-                <li>anchor manual, bukan jalur kritis</li>
-                <li>nol PII di chain</li>
+                <li>anchor Solana devnet</li>
+                <li>halaman publik: agregat + hash</li>
               </ul>
             </article>
           </div>
@@ -1093,13 +1216,74 @@
       </section>
 
       <!-- 05 ------------------------------------------------------------
-           SPEAKER: Demo. Klik pelan-pelan. Setiap langkah punya satu
-           kalimat. Jangan klaim akurasi data nyata.
+           SPEAKER: Lima pola penggunaan. Jangan baca semua definisi;
+           pilih T1, T4, dan T5 karena paling dekat dengan pertanyaan juri.
       -->
-      <section class="slide" data-screen-label="05 Demo">
+      <section class="slide" data-screen-label="05 Penggunaan dana">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Penggunaan dana</span>
+          <span class="idx">05 / 10</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Ke mana uangnya pergi?</h2>
+          <p class="lede" style="margin-top:16px;max-width:78ch;">Feed bank mitra mengirim transaksi penerima. Lima pola ditandai, dengan bukti dan alasan. Tidak ada blokir otomatis.</p>
+          <div class="patterns">
+            <article class="pattern">
+              <p class="pat-code">T1 <span class="pat-weight">0.50</span></p>
+              <h3>Taruhan</h3>
+              <p>Setoran ke merchant atau agen taruhan.</p>
+            </article>
+            <article class="pattern">
+              <p class="pat-code">T2 <span class="pat-weight">0.30</span></p>
+              <h3>Habis 7 hari</h3>
+              <p>Enam puluh persen dana keluar dalam sepekan.</p>
+            </article>
+            <article class="pattern">
+              <p class="pat-code">T3 <span class="pat-weight">0.15</span></p>
+              <h3>Tarik tunai</h3>
+              <p>Empat puluh lima persen dana ditarik tunai.</p>
+            </article>
+            <article class="pattern">
+              <p class="pat-code">T4 <span class="pat-weight">0.20</span></p>
+              <h3>Barang mewah</h3>
+              <p>Pembelian di atas Rp1,5 juta di merchant mewah, mis. Apple Store.</p>
+            </article>
+            <article class="pattern">
+              <p class="pat-code">T5 <span class="pat-weight">0.25</span></p>
+              <h3>Calo / joki</h3>
+              <p>Transfer berulang ke satu penerima, minimal tiga kali.</p>
+            </article>
+          </div>
+          <div class="txn-bottom">
+            <div class="flow">
+              <p class="flow-k">Dari temuan ke bukti</p>
+              <div class="flow-row">
+                <span class="flow-step">Temuan</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">Bukti per pola</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">Mutasi rekening</span>
+              </div>
+              <p class="flow-d">Klik satu temuan: merchant, nominal, tanggal. Lalu lihat running balance, grafik harian, dan kategori pengeluaran.</p>
+            </div>
+            <div class="txn-stats">
+              <div><b>5.411</b><span>transaksi</span></div>
+              <div><b>20</b><span>temuan</span></div>
+              <div><b>5</b><span>prioritas tinggi</span></div>
+            </div>
+          </div>
+          <p class="txn-caveat">Evaluasi data sintetis: P@10 1.00 · recall 0.88 · FP 1.5% pada 17 pola ditanam. Feed bank masih dummy; hasilnya rujukan verifikasi, bukan tuduhan.</p>
+        </div>
+      </section>
+
+      <!-- 06 ------------------------------------------------------------
+           SPEAKER: Demo. Mulai dari penyaluran, lalu masuk ke penggunaan
+           dana. Setiap langkah punya satu kalimat. Jangan klaim data nyata.
+      -->
+      <section class="slide" data-screen-label="06 Demo">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Demo · live</span>
-          <span class="idx">05 / 09</span>
+          <span class="idx">06 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Demo 90 detik.</h2>
@@ -1107,51 +1291,51 @@
             <ol class="steps">
               <li class="step">
                 <span class="n">01</span>
-                <div><h3>Muat ulang data contoh</h3><p>215 record, 0 temuan. Data batch penyaluran, bukan mutasi rekening.</p></div>
+                <div><h3>Dashboard penyaluran</h3><p>215 record, 15 temuan. Empat aturan R1-R4.</p></div>
               </li>
               <li class="step">
                 <span class="n">02</span>
-                <div><h3>Klik “Jalankan Deteksi”</h3><p>15 temuan, ~30 ms. Empat aturan deterministik.</p></div>
+                <div><h3>Buka “Penggunaan dana”</h3><p>5.411 transaksi, 20 temuan, 5 prioritas tinggi.</p></div>
               </li>
               <li class="step">
                 <span class="n">03</span>
-                <div><h3>Buka prioritas tinggi</h3><p>R1+R2+R3: dua mahasiswa satu rekening, rekening berumur 4 hari, nama pemilik berbeda.</p></div>
+                <div><h3>Klik “Jalankan Deteksi Pola”</h3><p>T1-T5, ~67 ms. Lima pola deterministik.</p></div>
               </li>
               <li class="step">
                 <span class="n">04</span>
-                <div><h3>Panel bukti</h3><p>Tiga bukti terpisah dan penjelasannya. Bukan satu skor misterius.</p></div>
+                <div><h3>Buka prioritas tinggi</h3><p>T1+T2: empat transaksi taruhan, mayoritas dana keluar dalam 7 hari.</p></div>
               </li>
               <li class="step">
                 <span class="n">05</span>
-                <div><h3>Tandai salah deteksi</h3><p>Status berubah, event tercatat: aktor, waktu, catatan. Tidak ada tuduhan permanen.</p></div>
+                <div><h3>Lihat mutasi rekening</h3><p>Running balance, grafik harian, kategori, dan mutasi lengkap.</p></div>
               </li>
               <li class="step">
                 <span class="n">06</span>
-                <div><h3>Opsional: bukti batch</h3><p>Tunjukkan hash SHA-256 dan memo Solana devnet yang sudah ter-anchor. Verifikasi = hitung ulang hash.</p></div>
+                <div><h3>Tandai salah deteksi, lalu halaman publik</h3><p>Status berubah. Publik hanya melihat agregat dan hash batch.</p></div>
               </li>
             </ol>
             <aside class="proof">
               <p class="proof-k">Juri harus pulang dengan</p>
               <ul>
-                <li>Satu temuan yang bisa dibaca alasannya.</li>
-                <li>Satu koreksi yang tercatat, bukan dihapus.</li>
+                <li>Satu pola yang bisa dibaca alasannya.</li>
+                <li>Satu mutasi yang bisa ditelusuri.</li>
                 <li>Satu hash yang bisa diverifikasi.</li>
               </ul>
-              <p class="proof-note"><b>Fallback:</b> build statis :8088 dan video 90 detik. Jalur demo tidak memanggil jaringan eksternal.</p>
-              <p class="proof-note"><b>Jangan klaim:</b> 1.00 / 1.00 / 0% hanya pada 215 data sintetis berlabel, bukan data nyata.</p>
+              <p class="proof-note"><b>Fallback:</b> video 90 detik + screenshot mutasi. Jalur demo lokal, tanpa jaringan eksternal.</p>
+              <p class="proof-note"><b>Jangan klaim:</b> 1.00 / 0.88 / 1.5% hanya pada data sintetis. 17 pola ditanam, 3 false positive.</p>
             </aside>
           </div>
         </div>
       </section>
 
-      <!-- 06 ------------------------------------------------------------
+      <!-- 07 ------------------------------------------------------------
            SPEAKER: Ini slide kejujuran. Blockchain penuh salah untuk
            data pribadi. Yang benar: hash-only anchoring.
       -->
-      <section class="slide" data-screen-label="06 Why not full blockchain">
+      <section class="slide" data-screen-label="07 Why not full blockchain">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Keputusan desain</span>
-          <span class="idx">06 / 09</span>
+          <span class="idx">07 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Blockchain penuh? <span class="accent">Justru salah di sini.</span></h2>
@@ -1161,7 +1345,7 @@
               <div class="why">
                 <p class="why-k">UU PDP 27/2022</p>
                 <h3>Data keuangan = data pribadi sensitif</h3>
-                <p>NIK, NIM, nomor rekening, dan nominal tidak boleh masuk ledger publik. Satu hash tidak membocorkan isi batch.</p>
+                <p>NIK, NIM, nomor rekening, nominal, dan merchant tidak boleh masuk ledger publik. Satu hash tidak membocorkan isi batch.</p>
               </div>
               <div class="why">
                 <p class="why-k">Right to erasure</p>
@@ -1171,13 +1355,13 @@
               <div class="why">
                 <p class="why-k">Due process</p>
                 <h3>Temuan bisa salah</h3>
-                <p>Tuduhan on-chain tidak bisa ditarik. Karena itu temuan dan status salah deteksi tidak pernah menyentuh chain.</p>
+                <p>Tuduhan on-chain tidak bisa ditarik. Temuan penyaluran dan penggunaan tidak pernah menyentuh chain.</p>
               </div>
             </div>
             <aside class="chain">
               <p class="chain-k">Yang benar-benar kami anchor</p>
               <div class="formula">
-                <span class="box">sha256(canonical batch)</span>
+                <span class="box">sha256(batch penyaluran)</span>
                 <span class="op">→</span>
                 <span class="box">batch hash</span>
                 <span class="op">→</span>
@@ -1185,24 +1369,25 @@
               </div>
               <ul>
                 <li>Hanya sidik jari batch. Nol PII on-chain.</li>
-                <li>Temuan, nama, rekening, nominal tidak pernah on-chain.</li>
+                <li>Temuan, nama, rekening, nominal, merchant tidak pernah on-chain.</li>
                 <li>Verifikasi: hitung ulang hash dari data, bandingkan dengan memo.</li>
+                <li>Halaman publik sudah memakai ini: agregat + bukti batch.</li>
                 <li>Demo memakai devnet. Produksi bisa chain-agnostic.</li>
               </ul>
-              <p class="chain-caveat">Hari ini: satu hash per batch. Merkle proof per record ada di roadmap, bukan klaim demo.</p>
+              <p class="chain-caveat">Hari ini: satu hash per batch penyaluran. Merkle proof per record ada di roadmap, bukan klaim demo.</p>
             </aside>
           </div>
         </div>
       </section>
 
-      <!-- 07 ------------------------------------------------------------
+      <!-- 08 ------------------------------------------------------------
            SPEAKER: Arsitektur sesederhana mungkin. Satu binary Go.
            Tidak ada ML, Redis, atau layanan eksternal di jalur demo.
       -->
-      <section class="slide" data-screen-label="07 Architecture">
+      <section class="slide" data-screen-label="08 Architecture">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Arsitektur</span>
-          <span class="idx">07 / 09</span>
+          <span class="idx">08 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Satu binary Go. Offline-first.</h2>
@@ -1210,15 +1395,16 @@
             <div class="node">
               <p class="node-k">Frontend</p>
               <p class="node-t">Preact + Vite</p>
-              <p class="node-d">Dashboard · temuan · panel bukti · bukti batch</p>
+              <p class="node-d">Penyaluran · penggunaan dana · halaman publik</p>
             </div>
             <div class="arrow"><span class="lbl">/api</span><span class="line"></span></div>
             <div class="node core">
               <p class="node-k">Core API</p>
               <p class="node-t">Go :8080</p>
               <div class="chips">
-                <span>R1-R4 + scorer</span>
-                <span>lifecycle + event</span>
+                <span>R1-R4</span>
+                <span>T1-T5</span>
+                <span>lifecycle</span>
                 <span>batch receipt</span>
                 <span>auth</span>
               </div>
@@ -1227,45 +1413,46 @@
             <div class="node">
               <p class="node-k">Data</p>
               <p class="node-t">Postgres 16</p>
-              <p class="node-d">students · accounts · disbursements · findings · events</p>
+              <p class="node-d">students · accounts · disbursements · transactions · findings</p>
             </div>
           </div>
-          <div class="anchor-row">
-            <span class="dash"></span>
-            <span class="anchor-node"><b>Solana devnet</b> · Memo(hash) · opsional, manual, tidak di jalur kritis</span>
+          <div class="feed-row">
+            <span class="feed-node"><b>Partner bank</b> · feed dummy · kerja sama, bukan akses langsung</span>
+            <span class="feed-node"><b>Solana devnet</b> · Memo(hash) · opsional, manual</span>
           </div>
           <div class="num-strip">
-            <div class="num"><div class="n">215</div><div class="c">record sintetis berlabel</div></div>
-            <div class="num"><div class="n">15</div><div class="c">temuan</div></div>
-            <div class="num"><div class="n">~30 ms</div><div class="c">waktu deteksi</div></div>
-            <div class="num"><div class="n">4</div><div class="c">aturan deterministik</div></div>
+            <div class="num"><div class="n">215</div><div class="c">record penyaluran</div></div>
+            <div class="num"><div class="n">5.411</div><div class="c">transaksi bank</div></div>
+            <div class="num"><div class="n">15</div><div class="c">temuan penyaluran</div></div>
+            <div class="num"><div class="n">20</div><div class="c">temuan penggunaan</div></div>
+            <div class="num"><div class="n">~67 ms</div><div class="c">deteksi pola</div></div>
           </div>
         </div>
         <footer class="foot">
           <p class="small" style="text-transform:none;letter-spacing:0.02em;font-family:var(--font);font-size:15px;color:var(--muted);">
-            Tanpa ML, tanpa Redis, tanpa panggilan jaringan di jalur demo. Setiap komponen tambahan adalah titik gagal di panggung.
+            Tanpa ML, tanpa Redis, tanpa panggilan jaringan di jalur demo. Feed bank dummy; produksi lewat kerja sama.
           </p>
-          <p class="source">Integrasi produksi: impor CSV/REST dari sistem kampus. Auth Supabase JWT; dev header hanya untuk demo.</p>
+          <p class="source">Integrasi produksi: CSV/REST kampus + feed bank mitra (SNAP-like). Auth Supabase JWT; dev header hanya demo.</p>
         </footer>
       </section>
 
-      <!-- 08 ------------------------------------------------------------
+      <!-- 09 ------------------------------------------------------------
            SPEAKER: Yang tidak kami bangun sama pentingnya. Ini pembeda
-           dari tim fraud lain yang mengintip mutasi rekening.
+           dari produk yang membuka rekening langsung.
       -->
-      <section class="slide" data-screen-label="08 Privacy & ethics">
+      <section class="slide" data-screen-label="09 Privacy & ethics">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Privasi &amp; etika</span>
-          <span class="idx">08 / 09</span>
+          <span class="idx">09 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Yang tidak kami bangun <span class="accent">sama pentingnya.</span></h2>
-          <p class="lede" style="margin-top:16px;max-width:82ch;">Kami tidak menjawab “apakah dia pakai iPhone?”. Kami menjawab “apakah dia berhak dan dananya sampai?”.</p>
+          <p class="lede" style="margin-top:16px;max-width:86ch;">Kami tidak menghakimi dari screenshot. Kami memeriksa pola dari feed bank mitra, dengan bukti yang bisa diverifikasi.</p>
           <div class="eth-grid">
             <article class="eth">
               <p class="eth-k">Tidak</p>
-              <h3>Mengintip mutasi rekening</h3>
-              <p>Postingan iPhone bukan bukti belanja. Mutasi dilindungi UU Perbankan Pasal 40; kampus tidak punya data merchant. Kami tidak membangun pengawasan yang tidak bisa dioperasikan.</p>
+              <h3>Membuka rekening langsung</h3>
+              <p>Data mutasi hanya dari feed bank mitra, bukan kampus mengintip rekening. Demo memakai data dummy; produksi butuh perjanjian berbagi data + dasar hukum.</p>
             </article>
             <article class="eth">
               <p class="eth-k">Tidak</p>
@@ -1275,29 +1462,29 @@
             <article class="eth">
               <p class="eth-k">Tidak</p>
               <h3>Memakai fitur demografis</h3>
-              <p>Empat aturan deterministik. Threshold konservatif: salah tuduh lebih mahal daripada telat menemukan.</p>
+              <p>Aturan deterministik. Threshold konservatif: salah tuduh lebih mahal daripada telat menemukan.</p>
             </article>
             <article class="eth">
               <p class="eth-k">Tidak</p>
               <h3>Menuduh permanen</h3>
-              <p><code>salah_deteksi</code> adalah status kelas satu. Setiap transisi punya event: aktor, waktu, catatan.</p>
+              <p><code>salah_deteksi</code> adalah status kelas satu. Koreksi tercatat, bukan stigma.</p>
             </article>
           </div>
         </div>
         <footer class="foot eth-foot">
-          <p>Data minimization: hanya data penyaluran dari kampus. Bukan screenshot, bukan mutasi, bukan profil perilaku.</p>
-          <p>Roadmap privasi: portal transparansi + consent eksplisit yang bisa dicabut. Bukan klaim demo hari ini.</p>
+          <p>Halaman publik: agregat + hash batch. Tanpa nama, NIM, rekening, atau temuan per orang.</p>
+          <p>Roadmap privasi: consent eksplisit + portal transparansi. Bukan klaim demo hari ini.</p>
         </footer>
       </section>
 
-      <!-- 09 ------------------------------------------------------------
+      <!-- 10 ------------------------------------------------------------
            SPEAKER: Tutup dengan dampak dan satu kalimat yang diingat
            juri. Jangan lupa ask: pilot satu kampus, satu batch, 30 hari.
       -->
-      <section class="slide" data-screen-label="09 Impact">
+      <section class="slide" data-screen-label="10 Impact">
         <header class="topline">
           <span class="brand"><i class="dot"></i> Dampak</span>
-          <span class="idx">09 / 09</span>
+          <span class="idx">10 / 10</span>
         </header>
         <div class="main">
           <h2 class="h2">Uang negara sampai. <span class="accent">Mahasiswa berhak tidak dikorbankan.</span></h2>
@@ -1310,7 +1497,7 @@
             <article class="who">
               <p class="who-k">Kampus</p>
               <h3>Antrean verifikasi ber-bukti</h3>
-              <p>Bukan sampling buta. Setiap baris punya alasan dan status.</p>
+              <p>Penyaluran dan pola penggunaan, bukan sampling buta.</p>
             </article>
             <article class="who">
               <p class="who-k">Mahasiswa</p>
@@ -1319,15 +1506,15 @@
             </article>
             <article class="who">
               <p class="who-k">Bank / regulator</p>
-              <h3>Tanpa data mutasi</h3>
-              <p>Integrasi CSV/REST. Audit hash-only, siap diperiksa.</p>
+              <h3>Feed pola lewat kerja sama</h3>
+              <p>Bukan akses langsung. Audit hash-only, siap diperiksa.</p>
             </article>
           </div>
           <div class="roadmap">
             <p class="roadmap-k">Roadmap</p>
-            <p><b>Feed bank (SNAP)</b> · <b>Isolation Forest</b> · <b>Merkle proof per record</b> · <b>Portal transparansi + consent</b></p>
+            <p><b>Feed bank produksi (SNAP)</b> · <b>Isolation Forest</b> · <b>Merkle proof per record</b> · <b>Portal consent</b></p>
           </div>
-          <p class="closing">Kami tidak menghakimi iPhone. <span class="accent">Kami membuktikan penyaluran.</span> Manusia yang memutuskan.</p>
+          <p class="closing">Kami tidak menghakimi screenshot. <span class="accent">Kami memeriksa pola.</span> Manusia yang memutuskan.</p>
         </div>
         <footer class="foot">
           <p class="ask">Pilot: satu kampus · satu batch · 30 hari</p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { getStats, getBatch, getEval } from '../lib/integra.js'
+import { getStats, getBatch, getEval } from '../lib/kiphone.js'
 
 // Public transparency view. Aggregates and the batch receipt only — this screen
 // deliberately never renders a student, an account number, or an individual

@@ -1,4 +1,4 @@
-# PRD — Integra: Deteksi Anomali Penyaluran KIP-K
+# PRD — KIPhone: Deteksi Anomali Penyaluran KIP-K
 
 **Version** 0.1 · **Date** 2026-11-14 · **Status** build-ready
 **Team** 2 people + agent fleet · **Event** 36-hour hackathon

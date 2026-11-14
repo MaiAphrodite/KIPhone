@@ -1,24 +1,27 @@
-# Integra — Deteksi Anomali Penyaluran KIP-K
+# KIPhone: Deteksi Anomali Penyaluran dan Penggunaan Dana KIP-K
 
-Dashboard integritas yang mendeteksi penyimpangan **penyaluran** dana KIP-K
-sebelum merugikan mahasiswa yang berhak — dengan bukti, bukan tuduhan.
-Build spec: [PRD.md](PRD.md).
+Dashboard integritas yang mendeteksi penyimpangan **penyaluran** dan pola
+**penggunaan dana** KIP-K sebelum merugikan mahasiswa yang berhak, dengan
+bukti, bukan tuduhan. Build spec: [PRD.md](PRD.md).
 
 Stack: Go + GORM + Postgres + Vite/Preact, fully offline demo.
 
-## Demo in 4 commands
+## Demo commands
 
 ```sh
 docker compose up -d                                   # postgres
 cd backend && DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/hackstack" PORT=8080 ./backend &
-curl -s -X POST localhost:8080/api/seed/load -H 'X-Dev-User: admin'   # 215 records
-curl -s -X POST localhost:8080/api/detect    -H 'X-Dev-User: admin'   # 15 findings
+curl -s -X POST localhost:8080/api/seed/load -H 'X-Dev-User: admin'    # 215 records
+curl -s -X POST localhost:8080/api/detect    -H 'X-Dev-User: admin'    # 15 findings, R1-R4
+curl -s -X POST localhost:8080/api/tx/seed   -H 'X-Dev-User: admin'    # 5.411 dummy bank txns
+curl -s -X POST localhost:8080/api/tx/detect -H 'X-Dev-User: admin'    # 20 findings, T1-T5
 cd ../frontend && npm run dev                          # http://localhost:5173
 ```
 
-Detection runs in ~30 ms over 215 records. `GET /api/eval` returns
+Disbursement detection runs in ~21 ms over 215 records; spending detection runs
+in ~67 ms over 5,411 transactions. `GET /api/eval` and `GET /api/tx/eval` return
 precision@10, recall and false-positive rate against the labelled synthetic
-batch (seed 42).
+batches (seed 42).
 
 ```
 Preact (Vite, :5173)  ──/api proxy──▶  Go API (:8080)  ──GORM──▶  Postgres (Supabase)
@@ -71,8 +74,9 @@ With `SUPABASE_JWT_SECRET` unset the API runs in dev mode and trusts the
 CSS consumes variables and never hardcodes a color. Keep the deck, the landing
 page and this app pointed at the same file and they will match on stage.
 
-Pitch deck: `design/integra-pitch.html` (9 slides, keyboard navigation) with a
-presentation-ready export at `design/integra-pitch.pdf`.
+Pitch deck: `design/kiphone-pitch.html` (10 slides, keyboard navigation) with a
+presentation-ready export at `design/kiphone-pitch.pdf`. Speaker script and Q&A:
+`design/PITCH-SCRIPT.md`.
 
 ## What to change for the theme
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { getBatch, anchorBatch } from '../lib/integra.js'
+import { getBatch, anchorBatch } from '../lib/kiphone.js'
 
 // Batch receipt + Solana anchor. The hash is computed offline by the backend,
 // so this screen is fully useful without a network or a funded wallet.

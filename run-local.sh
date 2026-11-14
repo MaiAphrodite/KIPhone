@@ -31,6 +31,14 @@ if [ "${RECORDS:-0}" = "0" ]; then
   curl -s -X POST "http://127.0.0.1:$PORT_API/api/detect" -H 'X-Dev-User: admin' >/dev/null
 fi
 
+# 3b) seed the dummy partner-bank feed if it is empty
+TXNS=$(curl -s -m 5 "http://127.0.0.1:$PORT_API/api/tx/stats" -H 'X-Dev-User: admin' | sed -n 's/.*"transactions":\([0-9]*\).*/\1/p')
+if [ "${TXNS:-0}" = "0" ]; then
+  say "seeding dummy bank transactions…"
+  curl -s -X POST "http://127.0.0.1:$PORT_API/api/tx/seed" -H 'X-Dev-User: admin' >/dev/null
+  curl -s -X POST "http://127.0.0.1:$PORT_API/api/tx/detect" -H 'X-Dev-User: admin' >/dev/null
+fi
+
 # 4) web (production build + preview server that proxies /api)
 say "building spa…"
 (cd "$ROOT/frontend" && npm run build >/dev/null 2>&1)

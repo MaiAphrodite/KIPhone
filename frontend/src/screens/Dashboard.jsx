@@ -7,7 +7,7 @@ import {
   loadSeed,
   formatNumber,
   formatPct,
-} from '../lib/integra.js'
+} from '../lib/kiphone.js'
 import { Findings } from './Findings.jsx'
 import { EvidenceDrawer } from '../components/EvidenceDrawer.jsx'
 import { ChainPanel } from '../components/ChainPanel.jsx'
@@ -102,7 +102,7 @@ export function Dashboard({ onSpending }) {
     <main class="shell">
       <header class="masthead dashboard-head">
         <div class="fade-up">
-          <p class="eyebrow">Integra · KIP-K</p>
+          <p class="eyebrow">KIPhone · KIP-K</p>
           <h1>Integritas penyaluran KIP-K</h1>
           <p class="muted">Temuan ber-bukti. Keputusan tetap di tangan manusia.</p>
         </div>
