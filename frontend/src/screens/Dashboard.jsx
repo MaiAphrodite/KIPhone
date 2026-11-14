@@ -10,6 +10,7 @@ import {
 } from '../lib/integra.js'
 import { Findings } from './Findings.jsx'
 import { EvidenceDrawer } from '../components/EvidenceDrawer.jsx'
+import { ChainPanel } from '../components/ChainPanel.jsx'
 
 const CARD_TONES = {
   'Total Record': 'neutral',
@@ -174,6 +175,7 @@ export function Dashboard() {
           onChanged={loadAll}
         />
       )}
+      <ChainPanel />
     </main>
   )
 }

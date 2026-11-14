@@ -137,3 +137,7 @@ export function formatPct(value) {
   if (value == null) return '-'
   return `${Math.round(Number(value) * 100)}%`
 }
+
+// ── batch receipt / chain ──────────────────────────────────────────────
+export const getBatch = () => request('/batch')
+export const anchorBatch = () => request('/batch/anchor', { method: 'POST' })

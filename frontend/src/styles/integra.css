@@ -142,3 +142,25 @@
 .event-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .event-row { font-size: 12.5px; color: var(--color-text-tertiary, #8a8f98); border-left: 2px solid rgba(255,255,255,.1); padding-left: 10px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ── batch receipt / chain ────────────────────────────────────────── */
+.chain-section { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--color-border, rgba(255,255,255,.08)); }
+.chain-title { font-size: 24px; letter-spacing: -0.02em; margin: 0 0 10px; font-weight: 560; }
+.chain-lead { max-width: 60ch; line-height: 1.6; }
+.receipt {
+  margin: 22px 0 0; padding: 0;
+  border: 1px solid var(--color-border, rgba(255,255,255,.08));
+  border-radius: var(--radius-lg, 12px); overflow: hidden;
+}
+.receipt-row {
+  display: grid; grid-template-columns: 210px 1fr; gap: 16px;
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.receipt-row:last-child { border-bottom: none; }
+.receipt dt { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-tertiary, #8a8f98); }
+.receipt dd { margin: 0; font-size: 14px; color: var(--color-text-primary, #f7f8f8); }
+.hash { word-break: break-all; font-size: 12.5px; line-height: 1.5; }
+.explorer { color: var(--color-accent, #7170ff); text-decoration: none; font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 12.5px; }
+.explorer:hover { text-decoration: underline; }
+.chain-actions { margin-top: 18px; }
+.chain-foot { margin-top: 14px; max-width: 68ch; line-height: 1.55; }
