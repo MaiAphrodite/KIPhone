@@ -1,7 +1,24 @@
-# Hackstack — Go + GORM + Supabase + Vite/Preact
+# Integra — Deteksi Anomali Penyaluran KIP-K
 
-A working vertical slice you can rename into whatever the theme turns out to be.
-Nothing here is theme-specific except the `Item` model.
+Dashboard integritas yang mendeteksi penyimpangan **penyaluran** dana KIP-K
+sebelum merugikan mahasiswa yang berhak — dengan bukti, bukan tuduhan.
+Build spec: [PRD.md](PRD.md).
+
+Stack: Go + GORM + Postgres + Vite/Preact, fully offline demo.
+
+## Demo in 4 commands
+
+```sh
+docker compose up -d                                   # postgres
+cd backend && DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/hackstack" PORT=8080 ./backend &
+curl -s -X POST localhost:8080/api/seed/load -H 'X-Dev-User: admin'   # 215 records
+curl -s -X POST localhost:8080/api/detect    -H 'X-Dev-User: admin'   # 15 findings
+cd ../frontend && npm run dev                          # http://localhost:5173
+```
+
+Detection runs in ~30 ms over 215 records. `GET /api/eval` returns
+precision@10, recall and false-positive rate against the labelled synthetic
+batch (seed 42).
 
 ```
 Preact (Vite, :5173)  ──/api proxy──▶  Go API (:8080)  ──GORM──▶  Postgres (Supabase)
