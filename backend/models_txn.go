@@ -31,4 +31,4 @@ type SpendFinding struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-var spendRuleWeights = map[string]float64{"T1": 0.50, "T2": 0.30, "T3": 0.15, "T4": 0.20}
+var spendRuleWeights = map[string]float64{"T1": 0.50, "T2": 0.30, "T3": 0.15, "T4": 0.20, "T5": 0.25}

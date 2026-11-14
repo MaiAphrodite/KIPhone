@@ -61,6 +61,9 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 		{[]string{"T2"}, "drain"},
 		{[]string{"T2"}, "drain"},
 		{[]string{"T2"}, "drain"},
+		{[]string{"T5"}, "calo"},
+		{[]string{"T5"}, "calo"},
+		{[]string{"T5", "T2"}, "calo"},
 		{[]string{"T3"}, "tunai"},
 		{[]string{"T3"}, "tunai"},
 		{[]string{"T2", "T3"}, "tunai"},
@@ -140,6 +143,14 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 			for n := 0; n < 3; n++ {
 				v := amt(600_000, 900_000)
 				add(s, start.AddDate(0, 0, r.Intn(5)), "TRANSFER KELUAR", "transfer", v, "transfer")
+				spent += v
+			}
+		case "calo":
+			// repeated transfers to one "agent" — calo / joki pattern
+			agent := []string{"TRF KE RUDI AGEN", "TRF KE SARI JOKI", "TRF KE ANTAR CALO"}[r.Intn(3)]
+			for n := 0; n < 5; n++ {
+				v := amt(300_000, 600_000)
+				add(s, start.AddDate(0, 0, r.Intn(8)), agent, "transfer", v, "transfer")
 				spent += v
 			}
 		case "tunai":

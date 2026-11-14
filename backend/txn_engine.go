@@ -18,6 +18,7 @@ import (
 // evidence + a sentence a human can read, no automatic action.
 
 const (
+	txCaloCount      = 3 // T5: same counterparty this many times
 	txDrainShare      = 0.60 // T2 threshold of disbursement spent in 7 days
 	txDrainDays       = 7
 	txCashOutShare    = 0.45 // T3 threshold withdrawn in cash
@@ -125,6 +126,36 @@ func detectSpending(students []Student, txns []Transaction) []SpendFinding {
 				sentences = append(sentences, fmt.Sprintf("%.0f%% pengeluaran berupa tarik tunai (%s).", cashShare*100, rupiah(tunai)))
 			}
 		}
+		// T5 — repeated transfers to the same counterparty (calo / joki).
+		transferBy := map[string]int{}
+		transferAmt := map[string]int64{}
+		for _, t := range list {
+			if t.Kategori != "transfer" {
+				continue
+			}
+			transferBy[t.Merchant]++
+			transferAmt[t.Merchant] += t.Nominal
+		}
+		var caloName string
+		var caloCount int
+		var caloTotal int64
+		for name, n := range transferBy {
+			if n >= txCaloCount && n*100 > len(list)*5 && n > caloCount {
+				caloName, caloCount, caloTotal = name, n, transferAmt[name]
+			}
+		}
+
+		if caloCount > 0 {
+			rules = append(rules, "T5")
+			risk += spendRuleWeights["T5"]
+			evidence["T5"] = map[string]any{
+				"penerima":   caloName,
+				"frekuensi":  fmt.Sprintf("%d kali", caloCount),
+				"total":      rupiah(caloTotal),
+			}
+			sentences = append(sentences, fmt.Sprintf("Transfer berulang ke penerima yang sama (%s) %d kali, total %s.", caloName, caloCount, rupiah(caloTotal)))
+		}
+
 		var luxury []string
 		for _, t := range list {
 			if t.Kategori == "mewah" && t.Nominal >= txLuxuryThreshold {

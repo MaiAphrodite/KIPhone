@@ -24,6 +24,7 @@ const RULES = {
   T2: 'Dana habis dalam 7 hari',
   T3: 'Tarik tunai terkonsentrasi',
   T4: 'Pembelian barang mewah',
+  T5: 'Transfer berulang ke penerima sama (calo/joki)',
 }
 
 function rupiah(v) {
@@ -209,7 +210,7 @@ export function Spending({ onBack }) {
       )}
 
       <section class="findings-section">
-        <div class="section-head"><h2>Temuan</h2><span class="caption">Empat pola: T1 taruhan · T2 dana habis cepat · T3 tunai terkonsentrasi · T4 barang mewah</span></div>
+        <div class="section-head"><h2>Temuan</h2><span class="caption">Lima pola: T1 taruhan · T2 dana habis cepat · T3 tunai terkonsentrasi · T4 barang mewah · T5 transfer berulang</span></div>
         {!findings ? <p class="muted empty">Memuat…</p> : findings.length === 0 ? (
           <p class="muted empty">Belum ada pola. Jalankan deteksi.</p>
         ) : (
