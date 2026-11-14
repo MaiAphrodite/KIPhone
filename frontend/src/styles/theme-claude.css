@@ -155,3 +155,52 @@ h1,h2,h3,.chain-title { font-family:Georgia,"Times New Roman",serif; font-weight
 .drawer-backdrop { animation: fade-in .16s linear both; }
 @keyframes fade-in { from {opacity:0} to {opacity:1} }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation:none!important; transition:none!important } }
+
+/* ── layout restyle: metrics as numerals on hairlines, not cards ─────── */
+.dashboard-head { padding-bottom: 18px; border-bottom: 1px solid var(--hairline); }
+.dashboard-head h1 { font-size: clamp(28px, 3.4vw, 38px); line-height: 1.12; margin-bottom: 8px; }
+.eyebrow { font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; margin: 34px 0 0; border: 0; background: none;
+}
+.stat-card {
+  background: none; border: 0; border-radius: 0;
+  border-left: 1px solid var(--hairline); border-top: 0;
+  padding: 2px 22px 0; margin: 0;
+}
+.stat-card:first-child { border-left: 0; padding-left: 0; }
+.stat-card.tone-accent, .stat-card.tone-danger, .stat-card.tone-neutral { border-top: 0; }
+.stat-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.stat-value {
+  display: block; margin-top: 8px; font-size: 42px; line-height: 1;
+  font-weight: 400; letter-spacing: -0.03em; color: var(--ink);
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum";
+}
+@media (max-width: 720px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); row-gap: 26px; }
+  .stat-card:nth-child(3) { border-left: 0; padding-left: 0; }
+}
+
+/* table: hairlines only, roomier */
+.findings th { border-bottom: 1px solid var(--hairline-strong); padding: 10px 14px 10px 0; }
+.findings td { border-bottom: 1px solid var(--hairline); padding: 14px 14px 14px 0; }
+.findings th:last-child, .findings td:last-child { padding-right: 0; }
+.findings tbody tr:hover { background: var(--surface-alt); }
+.table-wrap { border: 0; border-radius: 0; }
+.findings-section { margin-top: 40px; }
+.section-head h2, .drawer-title, .chain-title { font-family: Georgia, "Times New Roman", serif; }
+
+/* drawer: paper panel, serif quote */
+.drawer { background: var(--paper); border-left: 1px solid var(--hairline-strong); box-shadow: none; }
+.drawer-title { font-size: 22px; }
+.explanation {
+  font-family: Georgia, "Times New Roman", serif; font-style: italic;
+  font-size: 15px; line-height: 1.65; color: var(--ink);
+  background: none; border-left: 2px solid var(--clay); padding: 4px 0 4px 16px;
+  border-radius: 0;
+}
+.receipt { border: 1px solid var(--hairline); border-radius: var(--radius, 8px); }
+.eval-strip { background: var(--surface-alt); border: 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); border-radius: 0; }
+.btn { border-radius: 6px; }
