@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("db connect: %v", err)
 	}
-	if err := db.AutoMigrate(&Item{}); err != nil {
+	if err := db.AutoMigrate(&Item{}, &Student{}, &Account{}, &Disbursement{}, &Finding{}, &FindingEvent{}); err != nil {
 		log.Fatalf("migrate: %v", err)
 	}
 
@@ -49,6 +49,15 @@ func main() {
 	mux.Handle("GET /api/items", app.auth(http.HandlerFunc(app.listItems)))
 	mux.Handle("POST /api/items", app.auth(http.HandlerFunc(app.createItem)))
 	mux.Handle("DELETE /api/items/{id}", app.auth(http.HandlerFunc(app.deleteItem)))
+
+	// Integra — PRD §7
+	mux.Handle("POST /api/seed/load", app.auth(http.HandlerFunc(app.loadSeed)))
+	mux.Handle("POST /api/detect", app.auth(http.HandlerFunc(app.runDetect)))
+	mux.Handle("GET /api/findings", app.auth(http.HandlerFunc(app.listFindings)))
+	mux.Handle("GET /api/findings/{id}", app.auth(http.HandlerFunc(app.getFinding)))
+	mux.Handle("POST /api/findings/{id}/status", app.auth(http.HandlerFunc(app.setFindingStatus)))
+	mux.Handle("GET /api/stats", app.auth(http.HandlerFunc(app.stats)))
+	mux.Handle("GET /api/eval", app.auth(http.HandlerFunc(app.eval)))
 
 	srv := &http.Server{
 		Addr:              ":" + port,
