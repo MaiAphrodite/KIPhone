@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("db connect: %v", err)
 	}
-	if err := db.AutoMigrate(&Item{}, &Student{}, &Account{}, &Disbursement{}, &Finding{}, &FindingEvent{}); err != nil {
+	if err := db.AutoMigrate(&Item{}, &Student{}, &Account{}, &Disbursement{}, &Finding{}, &FindingEvent{}, &Batch{}); err != nil {
 		log.Fatalf("migrate: %v", err)
 	}
 
@@ -58,6 +58,8 @@ func main() {
 	mux.Handle("POST /api/findings/{id}/status", app.auth(http.HandlerFunc(app.setFindingStatus)))
 	mux.Handle("GET /api/stats", app.auth(http.HandlerFunc(app.stats)))
 	mux.Handle("GET /api/eval", app.auth(http.HandlerFunc(app.eval)))
+	mux.Handle("GET /api/batch", app.auth(http.HandlerFunc(app.batchReceipt)))
+	mux.Handle("POST /api/batch/anchor", app.auth(http.HandlerFunc(app.anchorBatch)))
 
 	srv := &http.Server{
 		Addr:              ":" + port,
