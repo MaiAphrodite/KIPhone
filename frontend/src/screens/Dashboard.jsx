@@ -19,7 +19,7 @@ const CARD_TONES = {
   'Salah Deteksi': 'danger',
 }
 
-export function Dashboard() {
+export function Dashboard({ onSpending }) {
   const [stats, setStats] = useState(null)
   const [findings, setFindings] = useState(null)
   const [evalData, setEvalData] = useState(null)
@@ -106,9 +106,12 @@ export function Dashboard() {
           <h1>Integritas penyaluran KIP-K</h1>
           <p class="muted">Temuan ber-bukti. Keputusan tetap di tangan manusia.</p>
         </div>
-        <button class="ghost" onClick={handleSeed} disabled={seedBusy}>
-          {seedBusy ? 'Memuat…' : 'Muat ulang data contoh'}
-        </button>
+        <div class="action-row">
+          <button class="ghost btn-sm" onClick={onSpending}>Penggunaan dana →</button>
+          <button class="ghost" onClick={handleSeed} disabled={seedBusy}>
+            {seedBusy ? 'Memuat…' : 'Muat ulang data contoh'}
+          </button>
+        </div>
       </header>
 
       {seedNote && <p class="caption seed-note">{seedNote}</p>}

@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("db connect: %v", err)
 	}
-	if err := db.AutoMigrate(&Item{}, &Student{}, &Account{}, &Disbursement{}, &Finding{}, &FindingEvent{}, &Batch{}); err != nil {
+	if err := db.AutoMigrate(&Item{}, &Student{}, &Account{}, &Disbursement{}, &Finding{}, &FindingEvent{}, &Batch{}, &Transaction{}, &SpendFinding{}); err != nil {
 		log.Fatalf("migrate: %v", err)
 	}
 
@@ -60,6 +60,15 @@ func main() {
 	mux.Handle("GET /api/eval", app.auth(http.HandlerFunc(app.eval)))
 	mux.Handle("GET /api/batch", app.auth(http.HandlerFunc(app.batchReceipt)))
 	mux.Handle("POST /api/batch/anchor", app.auth(http.HandlerFunc(app.anchorBatch)))
+
+	// Integra — transaction feed (dummy partner-bank data)
+	mux.Handle("POST /api/tx/seed", app.auth(http.HandlerFunc(app.txSeed)))
+	mux.Handle("POST /api/tx/detect", app.auth(http.HandlerFunc(app.txDetect)))
+	mux.Handle("GET /api/tx/findings", app.auth(http.HandlerFunc(app.txFindings)))
+	mux.Handle("GET /api/tx/findings/{id}", app.auth(http.HandlerFunc(app.txFindingDetail)))
+	mux.Handle("POST /api/tx/findings/{id}/status", app.auth(http.HandlerFunc(app.txStatus)))
+	mux.Handle("GET /api/tx/stats", app.auth(http.HandlerFunc(app.txStats)))
+	mux.Handle("GET /api/tx/eval", app.auth(http.HandlerFunc(app.txEval)))
 
 	srv := &http.Server{
 		Addr:              ":" + port,

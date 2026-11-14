@@ -71,6 +71,9 @@ With `SUPABASE_JWT_SECRET` unset the API runs in dev mode and trusts the
 CSS consumes variables and never hardcodes a color. Keep the deck, the landing
 page and this app pointed at the same file and they will match on stage.
 
+Pitch deck: `design/integra-pitch.html` (9 slides, keyboard navigation) with a
+presentation-ready export at `design/integra-pitch.pdf`.
+
 ## What to change for the theme
 
 | Piece | Where |
