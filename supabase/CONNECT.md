@@ -75,3 +75,32 @@ credentials or secrets. The database was reached through the MCP server's own
 privileged connection (`user=postgres`, PostgreSQL 17.11), not with a
 user-supplied password. The password must come from the Supabase dashboard or
 the project's secret store. Do not store it in this file.
+
+## 6. Verified connection (2026-11-14)
+
+The direct host is IPv6-only and this machine has no IPv6 route, so the
+**Singapore pooler** is the working path:
+
+```
+postgresql://postgres.bzguwmwapgodhayhwsfr:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+```
+
+With the database password supplied out-of-band, the Go backend ran the full
+pipeline against Supabase:
+
+| Step | Result |
+|---|---|
+| `GET /health` | `{"ok":"true"}` |
+| `POST /api/seed/load` | 215 students, 215 accounts, 215 disbursements |
+| `POST /api/detect` | 15 findings (418 ms over the pooler vs 13 ms local) |
+| `GET /api/stats` | 15 findings, 1 prioritas tinggi, 0 salah deteksi |
+
+`aws-1-ap-southeast-1` answers TCP but rejects the tenant; only `aws-0` serves
+this project.
+
+Keys provided by the project (publishable is browser-safe; the secret key is
+NOT used by the backend — the Go service talks Postgres directly):
+
+- publishable: `sb_publishable_…` → `frontend/.env.example`
+- secret: kept out of the repo
+- JWKS: `https://bzguwmwapgodhayhwsfr.supabase.co/auth/v1/.well-known/jwks.json`
