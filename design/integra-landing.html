@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integra — Disbursement Integrity Dashboard</title>
+<style>
+  :root {
+    --ink: #0a0a0b;
+    --paper: #f4f4f5;
+    --accent: #7170ff;
+    --muted: #9d9da3;
+    --hairline: rgba(244, 244, 245, 0.14);
+    --hairline-strong: rgba(244, 244, 245, 0.32);
+
+    --s1: 8px;
+    --s2: 16px;
+    --s3: 24px;
+    --s4: 32px;
+    --s5: 40px;
+    --s6: 48px;
+    --s8: 64px;
+    --s12: 96px;
+
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+      "Helvetica Neue", Arial, sans-serif;
+    --font-serif: Georgia, "Times New Roman", "Songti SC", serif;
+
+    --maxw: 1200px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--accent); color: var(--ink); }
+
+  a { color: var(--accent); text-decoration: none; }
+
+  .page {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 var(--s4);
+  }
+
+  /* ---------- Top rule / masthead ---------- */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--s4) 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .brand {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .brand .dot { color: var(--accent); }
+
+  .masthead-meta {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-family: var(--font-sans);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: var(--s12) 0 var(--s8);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 0.34fr;
+    gap: var(--s8);
+    align-items: end;
+  }
+
+  .hero h1 {
+    font-family: var(--font-sans);
+    font-weight: 650;
+    font-size: clamp(40px, 6.4vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    max-width: 15ch;
+  }
+  .hero h1 .accent { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 34ch;
+  }
+
+  /* ---------- Section scaffolding ---------- */
+  section { padding: var(--s8) 0; border-top: 1px solid var(--hairline); }
+
+  .section-head {
+    display: flex;
+    gap: var(--s4);
+    align-items: baseline;
+    margin-bottom: var(--s6);
+  }
+
+  .section-num {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+    min-width: var(--s5);
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+
+  /* ---------- Metrics strip ---------- */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .metric {
+    padding: var(--s4) var(--s3);
+    border-right: 1px solid var(--hairline);
+  }
+  .metric:last-child { border-right: none; }
+  .metric:first-child { padding-left: 0; }
+
+  .metric .num {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric .num .unit { font-size: 0.5em; color: var(--accent); }
+
+  .metric .label {
+    display: block;
+    margin-top: var(--s2);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  /* ---------- Four rules ---------- */
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .rule {
+    padding: var(--s4) var(--s3) var(--s5);
+    border-right: 1px solid var(--hairline);
+  }
+  .rule:last-child { border-right: none; }
+  .rule:first-child { padding-left: 0; }
+
+  .rule .rk {
+    display: block;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: var(--s2);
+  }
+
+  .rule .rt {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .rule .rd {
+    display: block;
+    margin-top: var(--s2);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ---------- Evidence ---------- */
+  .evidence {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .ev-col { padding: var(--s5) var(--s4); }
+  .ev-col + .ev-col { border-left: 1px solid var(--hairline); }
+
+  .ev-label {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--s4);
+  }
+
+  .ev-headline {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+  }
+
+  .ev-headline .accent { color: var(--accent); font-style: italic; }
+
+  .ev-body {
+    margin-top: var(--s4);
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 42ch;
+  }
+
+  .finding {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .finding-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--s3);
+    padding: var(--s3) 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+
+  .finding-row .fk {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .finding-row .fv {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .finding-row .fv.warn { color: var(--accent); }
+
+  .finding-row .fv .delta {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: var(--s2);
+    white-space: nowrap;
+  }
+
+  .finding-id {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: var(--s3);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .finding-id .fid { font-family: var(--font-sans); letter-spacing: 0.02em; }
+  .finding-id .fid code { color: var(--paper); font-family: inherit; }
+
+  /* ---------- Closing band ---------- */
+  .closing {
+    padding: var(--s12) 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .closing h2 {
+    font-family: var(--font-sans);
+    font-weight: 650;
+    font-size: clamp(40px, 6.4vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    max-width: 14ch;
+  }
+  .closing h2 .serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .closing-note {
+    margin-top: var(--s5);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s4);
+    align-items: start;
+    padding-top: var(--s5);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .closing-note p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 46ch;
+  }
+
+  .hash {
+    text-align: left;
+  }
+  .hash .hl {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--s2);
+  }
+  .hash code {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--paper);
+    letter-spacing: 0.01em;
+    word-break: break-all;
+    display: block;
+    line-height: 1.6;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--hairline);
+    padding: var(--s4) 0 var(--s6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  footer .right { text-align: right; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: var(--s4); }
+    .metrics { grid-template-columns: repeat(3, 1fr); }
+    .metric:nth-child(3n) { border-right: none; }
+    .metric:nth-child(n+4) { border-top: 1px solid var(--hairline); padding-left: 0; }
+    .metric:nth-child(4) { border-right: 1px solid var(--hairline); padding-left: var(--s3); }
+    .rules { grid-template-columns: repeat(2, 1fr); }
+    .rule:nth-child(2n) { border-right: none; }
+    .rule:nth-child(n+3) { border-top: 1px solid var(--hairline); padding-left: 0; }
+    .rule:nth-child(3) { border-right: 1px solid var(--hairline); padding-left: var(--s3); }
+    .evidence { grid-template-columns: 1fr; }
+    .ev-col + .ev-col { border-left: none; border-top: 1px solid var(--hairline); }
+    .closing-note { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 0 var(--s3); }
+    .masthead { flex-direction: column; align-items: flex-start; gap: var(--s1); }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .metric { border-right: 1px solid var(--hairline); border-top: 1px solid var(--hairline); padding-left: var(--s3) !important; }
+    .metric:nth-child(2n) { border-right: none; }
+    .metric:nth-child(-n+2) { border-top: none; }
+    .metric:nth-child(3n) { border-right: 1px solid var(--hairline); }
+    .rules { grid-template-columns: 1fr; }
+    .rule { border-right: none !important; border-top: 1px solid var(--hairline); padding-left: 0 !important; }
+    .rule:first-child { border-top: none; }
+    .finding-row { grid-template-columns: 1fr; gap: var(--s1); }
+    .section-head { flex-direction: column; gap: var(--s1); margin-bottom: var(--s4); }
+    footer { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+    footer .right { text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="masthead">
+      <span class="brand">Integra<span class="dot">.</span></span>
+      <span class="masthead-meta">KIP-K Disbursement Integrity</span>
+    </header>
+
+    <section class="hero" aria-label="Headline">
+      <h1>Dana KIP-K cair ke orang yang salah. <span class="accent">Sekarang terlihat.</span></h1>
+      <p class="hero-sub">Integra memindai batch penyaluran dan menandai anomali yang bisa dibuktikan. Model tidak memblokir apa pun. Manusia yang memutuskan.</p>
+    </section>
+
+    <section aria-label="Metrics">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <span class="section-title">Batch terakhir dipindai</span>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <span class="num">215</span>
+          <span class="label">record dipindai</span>
+        </div>
+        <div class="metric">
+          <span class="num">15</span>
+          <span class="label">temuan</span>
+        </div>
+        <div class="metric">
+          <span class="num">1.00</span>
+          <span class="label">precision@10</span>
+        </div>
+        <div class="metric">
+          <span class="num">0<span class="unit">%</span></span>
+          <span class="label">false positive</span>
+        </div>
+        <div class="metric">
+          <span class="num">13<span class="unit">ms</span></span>
+          <span class="label">runtime</span>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Empat aturan">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <span class="section-title">Empat aturan</span>
+      </div>
+      <div class="rules">
+        <div class="rule">
+          <span class="rk">R1</span>
+          <span class="rt">NIK ganda</span>
+          <span class="rd">Satu nomor induk muncul pada lebih dari satu penerima.</span>
+        </div>
+        <div class="rule">
+          <span class="rk">R2</span>
+          <span class="rt">Rekening bersama</span>
+          <span class="rd">Beberapa nama menarik dana ke rekening yang sama.</span>
+        </div>
+        <div class="rule">
+          <span class="rk">R3</span>
+          <span class="rt">Nama tidak cocok</span>
+          <span class="rd">Nama di daftar berbeda dari pemilik rekening.</span>
+        </div>
+        <div class="rule">
+          <span class="rk">R4</span>
+          <span class="rt">Penerima nonaktif</span>
+          <span class="rd">Penerima sudah tidak berstatus aktif saat penyaluran.</span>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Bukti temuan">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <span class="section-title">Bukti temuan</span>
+      </div>
+      <div class="evidence">
+        <div class="ev-col">
+          <div class="ev-label">Contoh temuan</div>
+          <p class="ev-headline">Nama tak cocok, rekening <span class="accent">dipakai bersama</span>, dan akun baru berumur empat hari.</p>
+          <p class="ev-body">Integra mengaitkan tiga sinyal independen menjadi satu anomali yang dapat diverifikasi. Setiap baris merujuk pada satu record dalam batch — tidak ada skor tersembunyi.</p>
+        </div>
+        <div class="ev-col finding">
+          <div class="finding-row">
+            <span class="fk">Nama</span>
+            <span class="fv warn">Rizky Pratama</span>
+          </div>
+          <div class="finding-row">
+            <span class="fk">Rekening</span>
+            <span class="fv warn">8801 0023 4471<span class="delta">dipakai 2 nama</span></span>
+          </div>
+          <div class="finding-row">
+            <span class="fk">Umur akun</span>
+            <span class="fv warn">4 hari<span class="delta">dibuka 12 Jan</span></span>
+          </div>
+          <div class="finding-row">
+            <span class="fk">Aturan</span>
+            <span class="fv">R3 · R2</span>
+          </div>
+          <div class="finding-id">
+            <span class="fid">batch <code>#KP-2025-0117</code></span>
+            <span class="fid">record <code>#092</code></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-label="Penutup">
+      <h2>Bukti, <span class="serif">bukan tuduhan.</span></h2>
+      <div class="closing-note">
+        <p>Setiap temuan merujuk pada baris yang dapat dibuka ulang oleh auditor. Integra tidak menahan dana — ia hanya membuat anomali terlihat sebelum keputusan manusia diambil.</p>
+        <div class="hash">
+          <span class="hl">Tanda terima batch</span>
+          <code>sha256:9f3c…e2a1</code>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Integra — anchored-ready on Solana. No PII on chain.</span>
+      <span class="right">Integrity dashboard · 2025</span>
+    </footer>
+
+  </div>
+</body>
+</html>
