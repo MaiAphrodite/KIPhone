@@ -101,7 +101,7 @@ export function Dashboard() {
   return (
     <main class="shell">
       <header class="masthead dashboard-head">
-        <div>
+        <div class="fade-up">
           <p class="eyebrow">Integra · KIP-K</p>
           <h1>Integritas penyaluran KIP-K</h1>
           <p class="muted">Temuan ber-bukti. Keputusan tetap di tangan manusia.</p>
@@ -123,8 +123,12 @@ export function Dashboard() {
       ) : (
         stats && (
           <section class="stats-grid" aria-label="Ringkasan">
-            {cards.map(([label, value]) => (
-              <article class={`stat-card tone-${CARD_TONES[label]}`} key={label}>
+            {cards.map(([label, value], i) => (
+              <article
+                class={`stat-card tone-${CARD_TONES[label]} fade-up`}
+                key={label}
+                style={{ animationDelay: (i * 60) + 'ms' }}
+              >
                 <span class="stat-label">{label}</span>
                 <strong class="stat-value">{formatNumber(value)}</strong>
               </article>

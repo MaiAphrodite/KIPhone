@@ -31,13 +31,13 @@ function RuleBadges({ rule }) {
   )
 }
 
-function FindingRow({ finding, onSelect }) {
+function FindingRow({ finding, onSelect, index }) {
   const band = BAND[finding.band] ?? { label: finding.band, tone: 'ok' }
   const status = STATUS[finding.status] ?? { label: finding.status, tone: 'muted' }
   const score = Number(finding.risk_score) || 0
 
   return (
-    <tr>
+    <tr class="fade-up" style={{ animationDelay: (index * 20) + 'ms' }}>
       <td class="mono">{finding.nim}</td>
       <td class="nama-cell">{finding.nama}</td>
       <td><RuleBadges rule={finding.rule} /></td>
@@ -102,8 +102,8 @@ export function Findings({ findings, filter, onFilter, onSelect }) {
               </tr>
             </thead>
             <tbody>
-              {rows.map((finding) => (
-                <FindingRow key={finding.id} finding={finding} onSelect={onSelect} />
+              {rows.map((finding, i) => (
+                <FindingRow key={finding.id} finding={finding} onSelect={onSelect} index={i} />
               ))}
             </tbody>
           </table>
