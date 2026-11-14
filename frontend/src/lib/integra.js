@@ -2,7 +2,50 @@ import { accessToken } from './supabase.js'
 
 const DEV_USER = 'admin'
 
+// Static demo build: no backend. Reads a snapshot in /demo and keeps lifecycle
+// changes in memory so the drawer still behaves like the live app.
+const DEMO_MODE = import.meta.env.VITE_DEMO === '1'
+const demoStatus = new Map()
+const demoEvents = new Map()
+
+function demoFile(path) {
+  const clean = path.replace(/^\//, '').replace(/\//g, '-')
+  return `/demo/${clean}.json`
+}
+
+async function demoRequest(path, options) {
+  const method = (options.method || 'GET').toUpperCase()
+  if (method === 'POST' && path === '/detect') return { findings_created: 15, by_rule: { R1: 4, R2: 6, R3: 6, R4: 3 }, runtime_ms: 13 }
+  if (method === 'POST' && path === '/seed/load') return { students: 215, accounts: 215, disbursements: 215, planted: 15 }
+  if (method === 'POST' && path === '/batch/anchor') throw new Error('Demo statis: anchor butuh backend + wallet devnet')
+  const statusMatch = path.match(/^\/findings\/(\d+)\/status$/)
+  if (method === 'POST' && statusMatch) {
+    const id = Number(statusMatch[1])
+    const body = JSON.parse(options.body || '{}')
+    demoStatus.set(id, body.to_status)
+    const list = demoEvents.get(id) || []
+    list.push({ from_status: 'baru', to_status: body.to_status, actor: 'demo', note: body.note || '', at: new Date().toISOString() })
+    demoEvents.set(id, list)
+    return { status: body.to_status }
+  }
+  const detailMatch = path.match(/^\/findings\/(\d+)$/)
+  const res = await fetch(demoFile(path))
+  if (!res.ok) throw new Error('Data demo tidak tersedia')
+  const data = await res.json()
+  if (detailMatch) {
+    const id = Number(detailMatch[1])
+    if (demoStatus.has(id)) data.finding.status = demoStatus.get(id)
+    data.events = [...(data.events || []), ...(demoEvents.get(id) || [])]
+    return data
+  }
+  if (path === '/findings' && Array.isArray(data.findings)) {
+    data.findings = data.findings.map((f) => demoStatus.has(f.id) ? { ...f, status: demoStatus.get(f.id) } : f)
+  }
+  return data
+}
+
 async function request(path, options = {}) {
+  if (DEMO_MODE) return demoRequest(path, options)
   const token = await accessToken()
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) }
   if (token) headers.Authorization = `Bearer ${token}`
