@@ -59,26 +59,37 @@ func detect(students []Student, accounts []Account, disbs []Disbursement) []Find
 		hitsByDisb[d.ID] = append(hitsByDisb[d.ID], h)
 	}
 
-	// R1 — penerima ganda: one NIK claimed by more than one student.
-	byNIK := map[string][]Student{}
-	for _, s := range students {
-		byNIK[s.NIK] = append(byNIK[s.NIK], s)
-	}
+	// R1 — penerima ganda: the same NIK *or* NIM claimed by more than one
+	// student (PRD §4.1 says "NIK atau NIM").
 	dupStudent := map[uint][]Student{}
-	for _, group := range byNIK {
-		if len(group) < 2 {
-			continue
+	mergeDuplicates := func(keyOf func(Student) string) {
+		groups := map[string][]Student{}
+		for _, s := range students {
+			k := keyOf(s)
+			if k == "" {
+				continue
+			}
+			groups[k] = append(groups[k], s)
 		}
-		for _, s := range group {
-			var others []Student
-			for _, o := range group {
-				if o.ID != s.ID {
-					others = append(others, o)
+		for _, group := range groups {
+			if len(group) < 2 {
+				continue
+			}
+			for _, s := range group {
+				seen := map[uint]bool{}
+				for _, existing := range dupStudent[s.ID] {
+					seen[existing.ID] = true
+				}
+				for _, o := range group {
+					if o.ID != s.ID && !seen[o.ID] {
+						dupStudent[s.ID] = append(dupStudent[s.ID], o)
+					}
 				}
 			}
-			dupStudent[s.ID] = others
 		}
 	}
+	mergeDuplicates(func(s Student) string { return s.NIK })
+	mergeDuplicates(func(s Student) string { return s.NIM })
 
 	// R2 — rekening bersama: >1 student on one account number.
 	ownerByRek := map[string][]Account{}

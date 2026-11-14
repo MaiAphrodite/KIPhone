@@ -34,3 +34,11 @@ QA pass over the Go backend, detection rules, seeder, API and PRD. Seed 42. No p
 ## Notes
 
 - `go build ./...`, `go test ./...`, the DB-backed `api_test.go` and `backend/test_api.sh` all pass on the current code. The defects above are logic, security, audit and documentation risks rather than failing tests.
+
+## Fixed after this pass (commit "fix: QA majors")
+
+- `handlers_findings.go` detection now wipes **all** findings and events (recompute semantics); re-running after a resolution no longer inflates stats — verified: mark 1 as `salah_deteksi`, re-detect → still 15 findings, not 16.
+- `handlers_findings.go` status update + audit event now run in one `db.Transaction` (PRD §4.4: no status change without its event).
+- `handlers_findings.go` recall now requires **every** expected rule for a label to count as covered (no partial-credit inflation).
+- `anomaly.go` R1 groups duplicates by NIK **or** NIM, matching PRD §4.1.
+- Still open: `handlers.go:86` unscoped `deleteItem` (legacy `/api/items` demo endpoint, not on the Integra path) and R2 being keyed by student rather than by disbursed account (edge case, not hit by the current seed).

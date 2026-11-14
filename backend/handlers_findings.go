@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // PRD §7: seed → detect → findings → lifecycle → stats → eval.
@@ -66,12 +68,13 @@ func (a *App) runDetect(w http.ResponseWriter, r *http.Request) {
 
 	findings := detect(students, accounts, disbs)
 
-	// Idempotent demo: re-running detection replaces unresolved findings.
-	if err := a.db.Exec("DELETE FROM finding_events WHERE finding_id IN (SELECT id FROM findings WHERE status = 'baru')").Error; err != nil {
+	// Detection is a recompute: every run replaces the full finding set, so a
+	// repeated run cannot duplicate rows or inflate stats.
+	if err := a.db.Exec("DELETE FROM finding_events").Error; err != nil {
 		writeErr(w, http.StatusInternalServerError, "clean events")
 		return
 	}
-	if err := a.db.Exec("DELETE FROM findings WHERE status = 'baru'").Error; err != nil {
+	if err := a.db.Exec("DELETE FROM findings").Error; err != nil {
 		writeErr(w, http.StatusInternalServerError, "clean findings")
 		return
 	}
@@ -202,13 +205,16 @@ func (a *App) setFindingStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	// Capture before the update: GORM writes the new value back into the struct.
 	from := f.Status
-	if err := a.db.Model(&Finding{}).Where("id = ?", f.ID).Update("status", in.ToStatus).Error; err != nil {
-		writeErr(w, http.StatusInternalServerError, "update status")
-		return
-	}
 	ev := FindingEvent{FindingID: f.ID, FromStatus: from, ToStatus: in.ToStatus, Actor: actor, Note: in.Note, At: time.Now()}
-	if err := a.db.Create(&ev).Error; err != nil {
-		writeErr(w, http.StatusInternalServerError, "insert event")
+	// Status and audit event move together or not at all (PRD §4.4).
+	err = a.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&Finding{}).Where("id = ?", f.ID).Update("status", in.ToStatus).Error; err != nil {
+			return err
+		}
+		return tx.Create(&ev).Error
+	})
+	if err != nil {
+		writeErr(w, http.StatusInternalServerError, "update status")
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"status": in.ToStatus, "event": ev})
@@ -269,11 +275,15 @@ func (a *App) eval(w http.ResponseWriter, r *http.Request) {
 		if !ok {
 			continue
 		}
+		all := true
 		for _, want := range l.Rules {
-			if strings.Contains(got, want) {
-				covered++
+			if !strings.Contains(got, want) {
+				all = false
 				break
 			}
+		}
+		if all {
+			covered++
 		}
 	}
 	recall := float64(covered) / float64(len(labels))
