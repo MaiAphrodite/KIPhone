@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 
@@ -227,5 +228,113 @@ func (a *App) txEval(w http.ResponseWriter, r *http.Request) {
 		"false_positives":     fp,
 		"false_positive_rate": fpRate,
 		"methodology":         "transaksi sintetis (dummy feed bank), seed 42",
+	})
+}
+
+// ── bank statement view (dummy feed) ───────────────────────────────────
+// Returns the full mutation for one recipient with a running balance and the
+// per-day / per-category series the UI draws as charts.
+
+type statementDay struct {
+	Tanggal string `json:"tanggal"`
+	Keluar  int64  `json:"keluar"`
+	Masuk   int64  `json:"masuk"`
+}
+
+type statementRow struct {
+	ID       uint   `json:"id"`
+	Tanggal  string `json:"tanggal"`
+	Merchant string `json:"merchant"`
+	Kategori string `json:"kategori"`
+	Nominal  int64  `json:"nominal"`
+	Arah     string `json:"arah"`
+	Channel  string `json:"channel"`
+	Saldo    int64  `json:"saldo"`
+}
+
+func (a *App) txStatement(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	var s Student
+	if err := a.db.First(&s, "id = ?", id).Error; err != nil {
+		writeErr(w, http.StatusNotFound, "mahasiswa tidak ditemukan")
+		return
+	}
+	var d Disbursement
+	a.db.Where("student_id = ?", s.ID).First(&d)
+
+	var txns []Transaction
+	if err := a.db.Where("student_id = ?", s.ID).Order("tanggal asc, id asc").Find(&txns).Error; err != nil {
+		writeErr(w, http.StatusInternalServerError, "query transaksi")
+		return
+	}
+	if len(txns) == 0 {
+		writeErr(w, http.StatusNotFound, "belum ada mutasi — jalankan POST /api/tx/seed")
+		return
+	}
+
+	start := txns[0].Tanggal.AddDate(0, 0, -1)
+	rows := make([]statementRow, 0, len(txns)+1)
+	balance := d.Nominal
+	rows = append(rows, statementRow{
+		ID: 0, Tanggal: start.Format("2006-01-02"), Merchant: "PENCAIRAN KIP-K " + d.Periode,
+		Kategori: "masuk", Nominal: d.Nominal, Arah: "masuk", Channel: "transfer", Saldo: balance,
+	})
+
+	byDay := map[string]*statementDay{}
+	byCat := map[string]int64{}
+	var totalKeluar int64
+	for _, t := range txns {
+		if t.Arah == "masuk" {
+			balance += t.Nominal
+			key := t.Tanggal.Format("2006-01-02")
+			if byDay[key] == nil {
+				byDay[key] = &statementDay{Tanggal: key}
+			}
+			byDay[key].Masuk += t.Nominal
+			rows = append(rows, statementRow{
+				ID: t.ID, Tanggal: key, Merchant: t.Merchant, Kategori: t.Kategori,
+				Nominal: t.Nominal, Arah: t.Arah, Channel: t.Channel, Saldo: balance,
+			})
+			continue
+		}
+		balance -= t.Nominal
+		totalKeluar += t.Nominal
+		byCat[t.Kategori] += t.Nominal
+		key := t.Tanggal.Format("2006-01-02")
+		if byDay[key] == nil {
+			byDay[key] = &statementDay{Tanggal: key}
+		}
+		byDay[key].Keluar += t.Nominal
+		rows = append(rows, statementRow{
+			ID: t.ID, Tanggal: key, Merchant: t.Merchant, Kategori: t.Kategori,
+			Nominal: t.Nominal, Arah: t.Arah, Channel: t.Channel, Saldo: balance,
+		})
+	}
+
+	days := make([]statementDay, 0, len(byDay))
+	for _, v := range byDay {
+		days = append(days, *v)
+	}
+	sort.Slice(days, func(i, j int) bool { return days[i].Tanggal < days[j].Tanggal })
+
+	type catRow struct {
+		Kategori string `json:"kategori"`
+		Total    int64  `json:"total"`
+	}
+	cats := make([]catRow, 0, len(byCat))
+	for k, v := range byCat {
+		cats = append(cats, catRow{Kategori: k, Total: v})
+	}
+	sort.Slice(cats, func(i, j int) bool { return cats[i].Total > cats[j].Total })
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"student":       s,
+		"disbursement":  d,
+		"rows":          rows,
+		"days":          days,
+		"by_category":   cats,
+		"total_keluar":  totalKeluar,
+		"saldo_akhir":   balance,
+		"source":        "dummy partner-bank feed",
 	})
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
+import { Statement } from './Statement.jsx'
 
 // Spending view over the partner-bank transaction feed (dummy data in this
 // build). Same contract as the disbursement view: evidence, no automatic
@@ -31,7 +32,7 @@ function rupiah(v) {
   return 'Rp ' + Number(v || 0).toLocaleString('id-ID')
 }
 
-function Evidence({ finding, onClose, onChanged }) {
+function Evidence({ finding, onClose, onChanged, onStatement }) {
   const [detail, setDetail] = useState(null)
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
@@ -128,7 +129,8 @@ function Evidence({ finding, onClose, onChanged }) {
               value={note} onInput={(e) => setNote(e.currentTarget.value)} />
           </div>
           <div class="lifecycle-actions">
-            <button class="btn" disabled={busy} onClick={() => move('diverifikasi')}>Verifikasi</button>
+            <button class="btn" disabled={busy} onClick={() => { onClose(); onStatement({ studentId: finding.student_id }) }}>Lihat mutasi rekening</button>
+            <button class="ghost" disabled={busy} onClick={() => move('diverifikasi')}>Verifikasi</button>
             <button class="btn btn-danger" disabled={busy} onClick={() => move('salah_deteksi')}>Tandai Salah Deteksi</button>
             <button class="ghost" disabled={busy} onClick={() => move('selesai')}>Selesaikan</button>
           </div>
@@ -142,6 +144,7 @@ function Evidence({ finding, onClose, onChanged }) {
 }
 
 export function Spending({ onBack }) {
+  const [statementFor, setStatementFor] = useState(null)
   const [stats, setStats] = useState(null)
   const [findings, setFindings] = useState(null)
   const [evalData, setEvalData] = useState(null)
@@ -170,6 +173,10 @@ export function Spending({ onBack }) {
     } finally {
       setBusy(false)
     }
+  }
+
+  if (statementFor) {
+    return <Statement studentId={statementFor.studentId} onBack={() => setStatementFor(null)} />
   }
 
   return (
@@ -242,7 +249,7 @@ export function Spending({ onBack }) {
         )}
       </section>
 
-      {selected && <Evidence finding={selected} onClose={() => setSelected(null)} onChanged={load} />}
+      {selected && <Evidence finding={selected} onClose={() => setSelected(null)} onChanged={load} onStatement={setStatementFor} />}
     </main>
   )
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"sort"
 	"time"
 )
 
@@ -98,7 +99,7 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 		budget := int64(2_400_000)
 
 		// normal daily life: ~36 transactions over 30 days
-		for n := 0; n < 36; n++ {
+		for n := 0; n < 24; n++ {
 			day := start.AddDate(0, 0, r.Intn(30))
 			switch r.Intn(10) {
 			case 0, 1, 2, 3:
@@ -123,6 +124,17 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 				spent += v
 			}
 		}
+
+		// incoming transfer from family — keeps the account from going negative
+		addIncome := func(day int, amount int64) {
+			out.Transactions = append(out.Transactions, Transaction{
+				ID: txID, StudentID: s.ID, Tanggal: start.AddDate(0, 0, day),
+				Merchant: "TRANSFER MASUK ORANG TUA", Kategori: "masuk",
+				Nominal: amount, Arah: "masuk", Channel: "transfer",
+			})
+			txID++
+		}
+		addIncome(10+r.Intn(6), amt(1_200_000, 1_800_000))
 
 		switch p.kind {
 		case "taruhan":
@@ -149,13 +161,13 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 			// repeated transfers to one "agent" — calo / joki pattern
 			agent := []string{"TRF KE RUDI AGEN", "TRF KE SARI JOKI", "TRF KE ANTAR CALO"}[r.Intn(3)]
 			for n := 0; n < 5; n++ {
-				v := amt(300_000, 600_000)
+				v := amt(200_000, 350_000)
 				add(s, start.AddDate(0, 0, r.Intn(8)), agent, "transfer", v, "transfer")
 				spent += v
 			}
 		case "tunai":
 			for n := 0; n < 2; n++ {
-				v := amt(700_000, 1_000_000)
+				v := amt(600_000, 800_000)
 				add(s, start.AddDate(0, 0, r.Intn(12)), "TARIK TUNAI ATM", "tunai", v, "atm")
 				spent += v
 			}
@@ -167,5 +179,36 @@ func generateTxns(students []Student, accounts []Account, disbs []Disbursement) 
 		_ = spent
 		_ = budget
 	}
+	// Make every statement internally consistent: walk each recipient's
+	// transactions in date order and drop any that would overdraw the account.
+	byStudent := map[uint][]Transaction{}
+	for _, t := range out.Transactions {
+		byStudent[t.StudentID] = append(byStudent[t.StudentID], t)
+	}
+	kept := make([]Transaction, 0, len(out.Transactions))
+	for _, student := range students {
+		list := byStudent[student.ID]
+		sort.Slice(list, func(i, j int) bool {
+			if list[i].Tanggal.Equal(list[j].Tanggal) {
+				return list[i].ID < list[j].ID
+			}
+			return list[i].Tanggal.Before(list[j].Tanggal)
+		})
+		balance := disbBy[student.ID].Nominal
+		for _, t := range list {
+			if t.Arah == "masuk" {
+				balance += t.Nominal
+				kept = append(kept, t)
+				continue
+			}
+			if t.Nominal > balance {
+				continue // would overdraw — drop it
+			}
+			balance -= t.Nominal
+			kept = append(kept, t)
+		}
+	}
+	sort.Slice(kept, func(i, j int) bool { return kept[i].ID < kept[j].ID })
+	out.Transactions = kept
 	return out
 }

@@ -67,6 +67,7 @@ func main() {
 	mux.Handle("GET /api/tx/findings", app.auth(http.HandlerFunc(app.txFindings)))
 	mux.Handle("GET /api/tx/findings/{id}", app.auth(http.HandlerFunc(app.txFindingDetail)))
 	mux.Handle("POST /api/tx/findings/{id}/status", app.auth(http.HandlerFunc(app.txStatus)))
+	mux.Handle("GET /api/tx/students/{id}/statement", app.auth(http.HandlerFunc(app.txStatement)))
 	mux.Handle("GET /api/tx/stats", app.auth(http.HandlerFunc(app.txStats)))
 	mux.Handle("GET /api/tx/eval", app.auth(http.HandlerFunc(app.txEval)))
 
