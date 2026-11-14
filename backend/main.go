@@ -50,7 +50,7 @@ func main() {
 	mux.Handle("POST /api/items", app.auth(http.HandlerFunc(app.createItem)))
 	mux.Handle("DELETE /api/items/{id}", app.auth(http.HandlerFunc(app.deleteItem)))
 
-	// Integra — PRD §7
+	// KIPhone: PRD §7
 	mux.Handle("POST /api/seed/load", app.auth(http.HandlerFunc(app.loadSeed)))
 	mux.Handle("POST /api/detect", app.auth(http.HandlerFunc(app.runDetect)))
 	mux.Handle("GET /api/findings", app.auth(http.HandlerFunc(app.listFindings)))
@@ -61,7 +61,7 @@ func main() {
 	mux.Handle("GET /api/batch", app.auth(http.HandlerFunc(app.batchReceipt)))
 	mux.Handle("POST /api/batch/anchor", app.auth(http.HandlerFunc(app.anchorBatch)))
 
-	// Integra — transaction feed (dummy partner-bank data)
+	// KIPhone: transaction feed (dummy partner-bank data)
 	mux.Handle("POST /api/tx/seed", app.auth(http.HandlerFunc(app.txSeed)))
 	mux.Handle("POST /api/tx/detect", app.auth(http.HandlerFunc(app.txDetect)))
 	mux.Handle("GET /api/tx/findings", app.auth(http.HandlerFunc(app.txFindings)))

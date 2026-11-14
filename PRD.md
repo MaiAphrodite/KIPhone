@@ -94,7 +94,7 @@ Chain (stretch only): store `sha256(batch canonical json)` per periode in
 
 `backend/seed/` generates **215 records**: 200 clean + 15 planted (R1×4, R2×4,
 R3×4, R4×3), labels in `seed/labels.json` for evaluation. Deterministic seed
-(`INTEGRA_SEED`, default 42) so the demo is reproducible on any machine.
+(`KIPHONE_SEED`, default 42) so the demo is reproducible on any machine.
 
 ## 7. API
 

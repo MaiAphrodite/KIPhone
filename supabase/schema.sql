@@ -1,4 +1,4 @@
--- Integra schema for Supabase (mirrors backend/models_domain.go + batch.go).
+-- KIPhone schema for Supabase (mirrors backend/models_domain.go + batch.go).
 -- GORM's AutoMigrate produces the same table names, so the Go code needs no change.
 
 create table if not exists students (

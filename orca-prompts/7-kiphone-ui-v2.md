@@ -2,9 +2,9 @@ You are the FRONTEND DESIGN worker for KIPhone. Repo: this worktree (Vite + Prea
 
 GOAL: replace the current dark Linear-style UI with a minimalist warm editorial dashboard in the **Anthropic / Claude** aesthetic, with tasteful motion. It must remain a working SPA wired to the live API.
 
-READ FIRST: PRD.md, frontend/src/app.jsx, screens/Dashboard.jsx, screens/Findings.jsx, components/EvidenceDrawer.jsx, components/ChainPanel.jsx, lib/integra.js, styles/tokens.css, styles/app.css, styles/integra.css.
+READ FIRST: PRD.md, frontend/src/app.jsx, screens/Dashboard.jsx, screens/Findings.jsx, components/EvidenceDrawer.jsx, components/ChainPanel.jsx, lib/kiphone.js, styles/tokens.css, styles/app.css, styles/kiphone.css.
 
-API IS LIVE at http://127.0.0.1:8080 (seeded, 15 findings). All endpoints already exist in lib/integra.js — DO NOT change request shapes.
+API IS LIVE at http://127.0.0.1:8080 (seeded, 15 findings). All endpoints already exist in lib/kiphone.js. DO NOT change request shapes.
 
 ## Design system to implement
 
@@ -52,9 +52,9 @@ Rules:
 - Buttons: background/color 120ms. No scale/bounce.
 
 ## Constraints
-- Do not change `lib/integra.js` request shapes or any Go file.
-- Keep `frontend/src/main.jsx` importing tokens.css, app.css, integra.css, theme-claude.css in that order.
-- Delete or neutralize now-unused dark-theme rules in integra.css if they fight the new theme; prefer adding overrides in theme-claude.css.
+- Do not change `lib/kiphone.js` request shapes or any Go file.
+- Keep `frontend/src/main.jsx` importing tokens.css, app.css, kiphone.css, theme-claude.css in that order.
+- Delete or neutralize now-unused dark-theme rules in kiphone.css if they fight the new theme; prefer adding overrides in theme-claude.css.
 - No new dependencies.
 - Keep each file under ~220 lines.
 

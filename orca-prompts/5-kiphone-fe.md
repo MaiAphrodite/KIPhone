@@ -35,7 +35,7 @@ BUILD THESE SCREENS (PRD §8):
 
 HARD REQUIREMENTS:
 - Keep the existing app.jsx shell working (it has a Landing screen at startup with onStart -> setView('app')). Replace the old items/list demo with the KIPhone dashboard; the Landing screen can stay as the hero shown first with its CTA leading into the dashboard.
-- Split into files: src/screens/Dashboard.jsx, src/screens/Findings.jsx (or components/), src/lib/integra.js (API calls). Keep each file under ~200 lines.
+- Split into files: src/screens/Dashboard.jsx, src/screens/Findings.jsx (or components/), src/lib/kiphone.js (API calls). Keep each file under ~200 lines.
 - Handle loading, empty, and error states. If the API returns an error, show the message, never a blank screen.
 - No new dependencies. No router library — a simple view state is enough.
 - Indonesian UI copy (the demo audience is Indonesian). Numbers formatted with thousand separators.

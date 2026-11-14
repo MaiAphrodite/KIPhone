@@ -1,10 +1,10 @@
 You are the FRONTEND worker. Repo: this worktree (Vite + Preact SPA, no TypeScript). Work FAST and in small steps. Do not explore beyond the files listed.
 
-READ ONLY THESE FIRST: frontend/src/main.jsx, src/app.jsx, src/styles/tokens.css, src/styles/app.css, src/styles/integra.css, src/lib/integra.js.
+READ ONLY THESE FIRST: frontend/src/main.jsx, src/app.jsx, src/styles/tokens.css, src/styles/app.css, src/styles/kiphone.css, src/lib/kiphone.js.
 
 TASK: add a warm editorial "Claude-style" theme and apply it. Do NOT rewrite component logic. CSS + minimal JSX class tweaks only.
 
-STEP 1 — create `frontend/src/styles/theme-claude.css` and import it in `main.jsx` AFTER integra.css:
+STEP 1: create `frontend/src/styles/theme-claude.css` and import it in `main.jsx` AFTER kiphone.css:
 ```css
 :root {
   --paper:#faf9f5; --surface:#ffffff; --surface-alt:#f5f4ef;
@@ -40,4 +40,4 @@ STEP 3 — verify:
 - `npm run build` in frontend/ and paste the output; it MUST pass.
 - Fix only compile errors you introduced.
 
-RULES: no new dependencies; no Go changes; do not touch lib/integra.js request shapes; keep files under 250 lines; do not restructure components beyond classes/imports. When done, print a 5-line summary of files touched and the build result. Commit nothing.
+RULES: no new dependencies; no Go changes; do not touch lib/kiphone.js request shapes; keep files under 250 lines; do not restructure components beyond classes/imports. When done, print a 5-line summary of files touched and the build result. Commit nothing.

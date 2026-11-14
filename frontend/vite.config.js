@@ -13,6 +13,8 @@ export default defineConfig({
   preview: {
     port: 8088,
     host: '127.0.0.1',
+    // allow public tunnels (cloudflare quick tunnel, ngrok, localtunnel)
+    allowedHosts: ['.trycloudflare.com', '.ngrok-free.app', '.loca.lt', 'localhost', '127.0.0.1'],
     proxy: {
       '/api': { target: 'http://127.0.0.1:8080', changeOrigin: true },
     },

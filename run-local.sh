@@ -1,5 +1,5 @@
 #!/bin/sh
-# Start the whole Integra demo locally: Postgres, Go API (:8080), SPA (:8088).
+# Start the whole KIPhone demo locally: Postgres, Go API (:8080), SPA (:8088).
 # Usage: sh run-local.sh          then open http://127.0.0.1:8088
 set -eu
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -19,7 +19,7 @@ fi
 if ! curl -sf -m 2 "http://127.0.0.1:$PORT_API/health" >/dev/null 2>&1; then
   say "starting go api on :$PORT_API…"
   (cd "$ROOT/backend" && DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/hackstack" \
-    PORT=$PORT_API setsid ./backend >/tmp/integra-api.log 2>&1 < /dev/null &)
+    PORT=$PORT_API setsid ./backend >/tmp/kiphone-api.log 2>&1 < /dev/null &)
   sleep 3
 fi
 
@@ -45,8 +45,8 @@ say "building spa…"
 
 if ! curl -sf -m 2 "http://127.0.0.1:$PORT_WEB/" >/dev/null 2>&1; then
   say "starting preview server on :$PORT_WEB…"
-  (cd "$ROOT/frontend" && setsid npx vite preview >/tmp/integra-web.log 2>&1 < /dev/null &)
+  (cd "$ROOT/frontend" && setsid npx vite preview >/tmp/kiphone-web.log 2>&1 < /dev/null &)
   sleep 4
 fi
 
-printf '\n  Integra  →  http://127.0.0.1:%s\n  API      →  http://127.0.0.1:%s/api/stats\n\n' "$PORT_WEB" "$PORT_API"
+printf '\n  KIPhone  →  http://127.0.0.1:%s\n  API      →  http://127.0.0.1:%s/api/stats\n\n' "$PORT_WEB" "$PORT_API"

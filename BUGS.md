@@ -19,7 +19,7 @@ QA pass over the Go backend, detection rules, seeder, API and PRD. Seed 42. No p
 - `backend/seed.go:102-103` **minor** - `delete(usedRek, a2.NomorRekening)` deletes the now-shared number from the uniqueness registry, so a later generated account can accidentally reuse it and create a false R2.
 - `backend/seed.go:134-136` **minor** - the planted R2+R3 holder name is only checked for inequality, not for `jaroWinkler < 0.85`; a future seed or name-list change can silently break the label (seed 42 works today).
 - `backend/seed.go:144-149` **minor** - the planted R3 names are only checked for inequality, not for a score below the 0.85 threshold; deterministic only because seed 42 happens to produce unrelated names.
-- `backend/seed.go:13` **minor** - seed value is hardcoded to 42; PRD §6 promises the `INTEGRA_SEED` environment override, which is not implemented.
+- `backend/seed.go:13` **minor** - seed value is hardcoded to 42; PRD §6 promises the `KIPHONE_SEED` environment override, which is not implemented.
 - `backend/handlers_findings.go:13-43` **minor** - `loadSeed` runs wipe and inserts without a transaction; a failure mid-load leaves a wiped or partially loaded batch.
 - `backend/handlers_findings.go:217-222` **minor** - `stats` ignores all query errors and returns HTTP 200 with zeros when the database fails.
 - `backend/handlers_findings.go:157-159` **minor** - `getFinding` maps every Scan or database error to 404, hiding real outages as "not found".
