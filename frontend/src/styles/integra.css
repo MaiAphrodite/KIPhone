@@ -164,3 +164,8 @@
 .explorer:hover { text-decoration: underline; }
 .chain-actions { margin-top: 18px; }
 .chain-foot { margin-top: 14px; max-width: 68ch; line-height: 1.55; }
+
+/* ── public transparency page ─────────────────────────────────────── */
+.public .chain-lead { max-width: 62ch; line-height: 1.65; }
+.privacy-list { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; color: var(--color-text-secondary, #3d3b36); }
+.privacy-list li { line-height: 1.55; }

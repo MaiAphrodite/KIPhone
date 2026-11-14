@@ -1,6 +1,6 @@
 // First screen of the demo. Visual language comes from the OpenDesign artifact
 // (design/landing.html); the copy is Integra's.
-export function Landing({ onStart }) {
+export function Landing({ onStart, onPublic }) {
   return (
     <main class="shell">
       <header class="masthead">
@@ -13,6 +13,7 @@ export function Landing({ onStart }) {
         </p>
         <div class="action-row" style="margin-top:24px">
           <button class="btn" onClick={onStart}>Buka dashboard</button>
+          <button class="ghost btn-sm" onClick={onPublic}>Halaman publik ↗</button>
           <span class="caption">215 record contoh · 15 temuan · ~30 ms</span>
         </div>
       </header>

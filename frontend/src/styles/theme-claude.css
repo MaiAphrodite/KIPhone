@@ -204,3 +204,21 @@ h1,h2,h3,.chain-title { font-family:Georgia,"Times New Roman",serif; font-weight
 .receipt { border: 1px solid var(--hairline); border-radius: var(--radius, 8px); }
 .eval-strip { background: var(--surface-alt); border: 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); border-radius: 0; }
 .btn { border-radius: 6px; }
+
+/* ── narrow-viewport fixes (metrics collide with the action row) ─────── */
+.action-row { margin-top: 28px; }
+.eval-strip { flex-wrap: wrap; row-gap: 14px; column-gap: 26px; }
+.eval-method { margin-left: 0; flex-basis: 100%; }
+
+@media (max-width: 760px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; column-gap: 0; row-gap: 0; margin-top: 26px; }
+  .stat-card { padding: 18px 0; border-left: 1px solid var(--hairline); }
+  .stat-card:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .stat-card:nth-child(even) { padding-left: 18px; }
+  .stat-card:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+  .stat-value { font-size: 34px; }
+  .stat-label { font-size: 10px; letter-spacing: .12em; }
+  .dashboard-head h1 { font-size: 26px; }
+  .findings th, .findings td { padding-right: 10px; }
+  .table-wrap { overflow-x: auto; }
+}

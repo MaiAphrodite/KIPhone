@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Integra - pitch deck KIP-K</title>
+  <style>
+    /* ===========================================================
+       Deck framework: 1920x1080 fixed canvas, scaled to viewport.
+       Only .slide.active is visible. Print = one slide per page.
+       =========================================================== */
+    :root {
+      --bg: #08090a;
+      --panel: #0f1011;
+      --surface: #14151a;
+      --fg: #f7f8f8;
+      --body: #b9bec9;
+      --muted: #8a8f98;
+      --meta: #62666d;
+      --line: rgba(255, 255, 255, 0.09);
+      --line-strong: rgba(255, 255, 255, 0.2);
+      --accent: #7170ff;
+      --accent-bright: #9493ff;
+      --success: #27a644;
+      --warn: #eab308;
+      --danger: #ef6461;
+      --font: "Inter", "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: "Berkeley Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #050608;
+      color: var(--fg);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .deck-shell { position: fixed; inset: 0; overflow: hidden; }
+    .deck-stage {
+      width: 1920px;
+      height: 1080px;
+      background: var(--bg);
+      position: relative;
+      transform-origin: top left;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
+    .slide { position: absolute; inset: 0; overflow: hidden; }
+    .slide:not(.active) { display: none !important; }
+    :where(.slide.active) { display: flex; flex-direction: column; }
+
+    .deck-counter {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 4px;
+      background: rgba(10, 12, 20, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font: 12px/1 var(--mono);
+      letter-spacing: 0.18em;
+      z-index: 1000;
+    }
+    .deck-counter button {
+      width: 36px; height: 36px;
+      background: transparent;
+      color: #fff;
+      border: 0;
+      border-radius: 50%;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.15s;
+    }
+    .deck-counter button:hover { background: rgba(255, 255, 255, 0.12); }
+    .deck-counter button[disabled] { opacity: 0.3; cursor: default; }
+    .deck-counter .deck-count { padding: 0 14px; letter-spacing: 0.22em; }
+    .deck-counter .deck-count .total { color: rgba(255, 255, 255, 0.5); }
+
+    @media print {
+      @page { size: 1920px 1080px; margin: 0; }
+      html, body {
+        width: 1920px !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: var(--bg) !important;
+      }
+      .deck-shell {
+        position: static !important;
+        display: block !important;
+        inset: auto !important;
+      }
+      .deck-stage {
+        width: 1920px !important;
+        height: auto !important;
+        transform: none !important;
+        box-shadow: none !important;
+        position: static !important;
+      }
+      .slide,
+      .slide:not(.active) {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        width: 1920px !important;
+        height: 1080px !important;
+        page-break-after: always;
+        break-after: page;
+      }
+      .slide:last-child { page-break-after: auto; break-after: auto; }
+      .deck-counter { display: none !important; }
+    }
+  </style>
+  <style>
+    /* Per-deck styles */
+    .slide { padding: 84px 120px 64px; }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+      flex: 0 0 auto;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+    .brand .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(113, 112, 255, 0.8);
+    }
+    .idx {
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+    .foot {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+    .kicker {
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin: 0 0 28px;
+    }
+    h1, h2, h3, p { text-wrap: pretty; }
+    h1, h2, h3 { text-wrap: balance; }
+
+    .hero {
+      font-size: 104px;
+      line-height: 0.99;
+      letter-spacing: -0.042em;
+      font-weight: 600;
+      max-width: 15ch;
+    }
+    .hero .accent { color: var(--accent-bright); }
+    .h2 {
+      font-size: 68px;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      font-weight: 600;
+      max-width: 25ch;
+    }
+    .h2 .accent { color: var(--accent-bright); }
+    .lede {
+      font-size: 23px;
+      line-height: 1.55;
+      color: var(--body);
+      max-width: 50ch;
+      margin-top: 30px;
+    }
+    .small {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--meta);
+    }
+    .mono { font-family: var(--mono); }
+
+    /* slide 1 */
+    .hook-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 96px;
+      align-items: center;
+    }
+    .story {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 38px 40px 34px;
+      position: relative;
+    }
+    .story::before {
+      content: "";
+      position: absolute;
+      top: -1px; left: 40px; right: 40px;
+      height: 2px;
+      background: var(--accent);
+    }
+    .story-k {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+    .story-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+    .story-list li {
+      font-size: 20px;
+      line-height: 1.45;
+      color: var(--body);
+      padding-left: 30px;
+      position: relative;
+    }
+    .story-list li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 11px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .story-list b { color: var(--fg); font-weight: 600; }
+    .story-close {
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      font-size: 19px;
+      line-height: 1.5;
+      color: var(--fg);
+    }
+    .fact-row { display: flex; gap: 72px; }
+    .fact b {
+      display: block;
+      font-size: 25px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .fact span {
+      display: block;
+      margin-top: 5px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .source {
+      max-width: 34ch;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--meta);
+      text-align: right;
+    }
+
+    /* slide 2 */
+    .three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 44px;
+      margin-top: 64px;
+    }
+    .prob {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 26px;
+    }
+    .prob .n {
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      color: var(--accent-bright);
+      margin-bottom: 18px;
+    }
+    .prob h3 {
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .prob p {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .closing-line {
+      font-size: 25px;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      max-width: 70ch;
+    }
+
+    /* slide 3 */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 52px;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 30px 30px 26px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-tag {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 18px;
+    }
+    .pillar h3 {
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .pillar > p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .built {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .built li {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--body);
+      padding-left: 16px;
+      position: relative;
+    }
+    .built li::before {
+      content: "↳";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .built-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--meta);
+      margin-bottom: 12px;
+    }
+
+    /* slide 4 */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 64px;
+      margin-top: 44px;
+      align-items: start;
+    }
+    .steps { list-style: none; display: flex; flex-direction: column; }
+    .step {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 18px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .step:last-child { border-bottom: none; }
+    .step .n {
+      font-family: var(--mono);
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      color: var(--accent-bright);
+      padding-top: 3px;
+    }
+    .step h3 {
+      font-size: 21px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .step p {
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .proof {
+      background: rgba(113, 112, 255, 0.07);
+      border: 1px solid rgba(113, 112, 255, 0.28);
+      border-radius: 14px;
+      padding: 30px 32px;
+    }
+    .proof-k {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 20px;
+    }
+    .proof ul { list-style: none; display: flex; flex-direction: column; gap: 15px; }
+    .proof li {
+      font-size: 19px;
+      line-height: 1.4;
+      color: var(--fg);
+      padding-left: 24px;
+      position: relative;
+    }
+    .proof li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent-bright);
+    }
+    .proof-note {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(113, 112, 255, 0.25);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .proof-note b { color: var(--fg); }
+
+    /* slide 5 */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      margin-top: 44px;
+      align-items: start;
+    }
+    .why-list { display: flex; flex-direction: column; }
+    .why {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .why:first-child { padding-top: 0; }
+    .why:last-child { border-bottom: none; }
+    .why-k {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--danger);
+      margin-bottom: 7px;
+    }
+    .why h3 {
+      font-size: 23px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+    .why p {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .chain {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 32px;
+    }
+    .chain-k {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--success);
+      margin-bottom: 24px;
+    }
+    .formula {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.4;
+      color: var(--fg);
+      margin-bottom: 24px;
+    }
+    .formula .box {
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 9px 12px;
+      background: var(--surface);
+    }
+    .formula .op { color: var(--accent-bright); font-size: 18px; }
+    .chain ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .chain li {
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--body);
+      padding-left: 20px;
+      position: relative;
+    }
+    .chain li::before {
+      content: "·";
+      position: absolute;
+      left: 3px;
+      color: var(--accent-bright);
+      font-size: 24px;
+      line-height: 1;
+      top: 0;
+    }
+    .chain-caveat {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    /* slide 6 */
+    .arch {
+      display: grid;
+      grid-template-columns: 1fr 70px 1.1fr 70px 1fr;
+      align-items: stretch;
+      margin-top: 46px;
+    }
+    .node {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px 26px 22px;
+      display: flex;
+      flex-direction: column;
+    }
+    .node-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .node-t {
+      font-size: 26px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .node-d {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .core { border-color: rgba(113, 112, 255, 0.38); background: rgba(113, 112, 255, 0.06); }
+    .core .node-t { color: var(--accent-bright); }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
+    .chips span {
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: var(--body);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 9px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--meta);
+    }
+    .arrow .lbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .arrow .line { width: 100%; height: 1px; background: var(--line-strong); position: relative; }
+    .arrow .line::after {
+      content: "";
+      position: absolute;
+      right: 0; top: -3px;
+      width: 7px; height: 7px;
+      border-top: 1px solid var(--line-strong);
+      border-right: 1px solid var(--line-strong);
+      transform: rotate(45deg);
+    }
+    .anchor-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 22px;
+      padding-left: 24px;
+    }
+    .anchor-row .dash {
+      width: 46px;
+      border-top: 1px dashed rgba(39, 166, 68, 0.6);
+    }
+    .anchor-node {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--body);
+      border: 1px dashed rgba(39, 166, 68, 0.45);
+      border-radius: 999px;
+      padding: 9px 16px;
+      background: rgba(39, 166, 68, 0.05);
+    }
+    .anchor-node b { color: #6ee7a0; font-weight: 500; }
+    .num-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 34px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line-strong);
+    }
+    .num .n {
+      font-size: 38px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+    }
+    .num .c {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* slide 7 */
+    .eth-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px 40px;
+      margin-top: 46px;
+    }
+    .eth {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 20px;
+    }
+    .eth-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--danger);
+      margin-bottom: 9px;
+    }
+    .eth h3 {
+      font-size: 23px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .eth p {
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .eth code {
+      font-family: var(--mono);
+      font-size: 0.92em;
+      color: var(--fg);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .eth-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 56px;
+      align-items: flex-end;
+    }
+    .eth-foot p:first-child {
+      font-size: 21px;
+      line-height: 1.45;
+      color: var(--fg);
+      max-width: 64ch;
+    }
+    .eth-foot p:last-child {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      color: var(--meta);
+      max-width: 36ch;
+      text-align: right;
+    }
+
+    /* slide 8 */
+    .impact {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      margin-top: 44px;
+    }
+    .who {
+      border-top: 1px solid var(--line-strong);
+      padding-top: 20px;
+    }
+    .who-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 12px;
+    }
+    .who h3 {
+      font-size: 21px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+      margin-bottom: 9px;
+    }
+    .who p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .roadmap {
+      display: flex;
+      gap: 20px;
+      align-items: baseline;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .roadmap-k {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--meta);
+      white-space: nowrap;
+    }
+    .roadmap p {
+      font-size: 15px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+    .roadmap b { color: var(--body); font-weight: 500; }
+    .closing {
+      margin-top: 34px;
+      font-size: 46px;
+      line-height: 1.16;
+      letter-spacing: -0.028em;
+      font-weight: 600;
+      max-width: 34ch;
+    }
+    .closing .accent { color: var(--accent-bright); }
+    .ask {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+    .ask span { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="deck-shell">
+    <div class="deck-stage" id="deck-stage">
+
+      <!-- 01 ------------------------------------------------------------
+           SPEAKER: Buka dengan cerita, bukan statistik. Ilham berhak.
+           Satu NIK dipakai dua penerima. Tidak ada yang mencocokkan.
+      -->
+      <section class="slide active" data-screen-label="01 Hook">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Integra</span>
+          <span class="idx">01 / 08</span>
+        </header>
+        <div class="main">
+          <div class="hook-grid">
+            <div>
+              <p class="kicker">Studi kasus · KIP-Kuliah</p>
+              <h1 class="hero">Ilham berhak. <span class="accent">Namanya dipakai orang lain.</span></h1>
+              <p class="lede">Bayangkan seorang mahasiswa KIP-K dari keluarga prasejahtera. Satu NIK terdaftar dua kali. Dana cair ke rekening yang bukan miliknya. Tidak ada yang melihat, karena tidak ada yang mencocokkan.</p>
+            </div>
+            <aside class="story">
+              <p class="story-k">Yang terjadi</p>
+              <ol class="story-list">
+                <li><b>Pagi:</b> SK penerima terbit. Nama Ilham ada di dalamnya.</li>
+                <li><b>Siang:</b> dana cair ke rekening dengan nama pemilik berbeda.</li>
+                <li><b>Audit:</b> Ilham yang harus membuktikan dirinya bukan penerima fiktif.</li>
+              </ol>
+              <p class="story-close">Tidak ada jejak dari SK ke rekening. Tidak ada bukti bahwa data tidak diubah.</p>
+            </aside>
+          </div>
+        </div>
+        <footer class="foot">
+          <div class="fact-row">
+            <div class="fact"><b>Ratusan ribu</b><span>penerima KIP-K</span></div>
+            <div class="fact"><b>Triliunan rupiah</b><span>per tahun</span></div>
+            <div class="fact"><b>Manual + sampling</b><span>verifikasi hari ini</span></div>
+          </div>
+          <p class="source">Sumber angka: kipkuliah.kemdikbud.go.id, dibulatkan. Verifikasi angka terbaru sebelum pitch.</p>
+        </footer>
+      </section>
+
+      <!-- 02 ------------------------------------------------------------
+           SPEAKER: Tiga lubang. Semua berasal dari satu hal: data tidak
+           pernah dicocokkan dan tidak punya bukti keaslian.
+      -->
+      <section class="slide" data-screen-label="02 Problem">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Masalah</span>
+          <span class="idx">02 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Bukan karena data kurang. <span class="accent">Karena data tidak pernah dicocokkan.</span></h2>
+          <div class="three">
+            <article class="prob">
+              <p class="n">01</p>
+              <h3>Tidak ada jejak yang menyambung</h3>
+              <p>SK penerima, NIK/NIM, dan rekening hidup di berkas terpisah. Tidak ada satu baris yang bisa ditelusuri dari SK ke rekening.</p>
+            </article>
+            <article class="prob">
+              <p class="n">02</p>
+              <h3>Pola fraud klasik lolos</h3>
+              <p>NIK ganda, rekening bersama, nama pemilik tidak cocok, penerima nonaktif. Semua terlihat jika dicocokkan, tapi tidak ada yang mencocokkan.</p>
+            </article>
+            <article class="prob">
+              <p class="n">03</p>
+              <h3>Audit tanpa bukti keaslian</h3>
+              <p>Saat diperiksa, tidak ada cara membuktikan data yang dilihat auditor sama dengan data saat pencairan.</p>
+            </article>
+          </div>
+        </div>
+        <footer class="foot">
+          <p class="closing-line">Setiap rupiah yang bocor adalah kuota yang hilang untuk mahasiswa miskin yang berhak.</p>
+        </footer>
+      </section>
+
+      <!-- 03 ------------------------------------------------------------
+           SPEAKER: Tiga pilar. Trace, detect, prove. Sebut yang sudah
+           benar-benar jalan, bukan roadmap.
+      -->
+      <section class="slide" data-screen-label="03 Solution">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Solusi</span>
+          <span class="idx">03 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Tiga hal yang harus benar.</h2>
+          <p class="lede" style="margin-top:18px;max-width:64ch;">Kami membangun yang paling kecil yang membuat ketiganya benar. Bukan dashboard besar dengan banyak fitur.</p>
+          <div class="pillars">
+            <article class="pillar">
+              <p class="pillar-tag">01 · Trace</p>
+              <h3>Temuan tertaut ke baris penyaluran</h3>
+              <p>Setiap temuan membawa SK, NIM, rekening, nominal, tanggal, dan evidence JSON. Bukan tuduhan lepas.</p>
+              <p class="built-k">Sudah jalan</p>
+              <ul class="built">
+                <li>join findings + students + accounts</li>
+                <li>evidence per aturan</li>
+                <li>panel bukti di dashboard</li>
+              </ul>
+            </article>
+            <article class="pillar">
+              <p class="pillar-tag">02 · Detect</p>
+              <h3>Empat aturan, satu skor</h3>
+              <p>R1 NIK/NIM ganda, R2 rekening bersama, R3 nama tidak cocok, R4 nonaktif menerima. Skor berbobot dengan alasan per aturan.</p>
+              <p class="built-k">Sudah jalan</p>
+              <ul class="built">
+                <li>215 record sintetis berlabel</li>
+                <li>15 temuan dalam ~30 ms</li>
+                <li>penjelasan bahasa manusia</li>
+              </ul>
+            </article>
+            <article class="pillar">
+              <p class="pillar-tag">03 · Prove</p>
+              <h3>Sidik jari batch, bukan data pribadi</h3>
+              <p>SHA-256 dari seluruh baris penyaluran. Opsional di-anchor sebagai memo di Solana devnet. Temuan tidak pernah on-chain.</p>
+              <p class="built-k">Sudah jalan</p>
+              <ul class="built">
+                <li>hash deterministik per batch</li>
+                <li>anchor manual, bukan jalur kritis</li>
+                <li>nol PII di chain</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 ------------------------------------------------------------
+           SPEAKER: Demo. Klik pelan-pelan. Setiap langkah punya satu
+           kalimat. Jangan klaim akurasi data nyata.
+      -->
+      <section class="slide" data-screen-label="04 Demo">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Demo · live</span>
+          <span class="idx">04 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Demo 90 detik.</h2>
+          <div class="demo-grid">
+            <ol class="steps">
+              <li class="step">
+                <span class="n">01</span>
+                <div><h3>Dashboard: 215 record, 0 temuan</h3><p>Data batch penyaluran, bukan mutasi rekening. Semua hijau.</p></div>
+              </li>
+              <li class="step">
+                <span class="n">02</span>
+                <div><h3>Klik “Jalankan Deteksi”</h3><p>15 temuan, ~30 ms. Empat aturan deterministik.</p></div>
+              </li>
+              <li class="step">
+                <span class="n">03</span>
+                <div><h3>Buka prioritas tinggi</h3><p>R1+R2+R3: dua mahasiswa satu rekening, rekening berumur 4 hari, nama pemilik berbeda.</p></div>
+              </li>
+              <li class="step">
+                <span class="n">04</span>
+                <div><h3>Panel bukti</h3><p>Tiga bukti terpisah dan penjelasannya. Bukan satu skor misterius.</p></div>
+              </li>
+              <li class="step">
+                <span class="n">05</span>
+                <div><h3>Tandai salah deteksi</h3><p>Status berubah, event tercatat: aktor, waktu, catatan. Tidak ada tuduhan permanen.</p></div>
+              </li>
+              <li class="step">
+                <span class="n">06</span>
+                <div><h3>Opsional: bukti batch</h3><p>Tunjukkan hash SHA-256 dan memo Solana devnet. Verifikasi = hitung ulang hash dari data.</p></div>
+              </li>
+            </ol>
+            <aside class="proof">
+              <p class="proof-k">Juri harus pulang dengan</p>
+              <ul>
+                <li>Satu temuan yang bisa dibaca alasannya.</li>
+                <li>Satu koreksi yang tercatat, bukan dihapus.</li>
+                <li>Satu hash yang bisa diverifikasi.</li>
+              </ul>
+              <p class="proof-note"><b>Fallback:</b> build statis :8088 dan video 90 detik. Jalur demo tidak memanggil jaringan eksternal.</p>
+              <p class="proof-note"><b>Jangan klaim:</b> 1.00 / 1.00 / 0% hanya pada 215 data sintetis berlabel, bukan data nyata.</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 ------------------------------------------------------------
+           SPEAKER: Ini slide kejujuran. Blockchain penuh salah untuk
+           data pribadi. Yang benar: hash-only anchoring.
+      -->
+      <section class="slide" data-screen-label="05 Why not full blockchain">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Keputusan desain</span>
+          <span class="idx">05 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Blockchain penuh? <span class="accent">Justru salah di sini.</span></h2>
+          <p class="lede" style="margin-top:18px;max-width:66ch;">Kami memakai chain untuk membuktikan data, bukan untuk menyimpan data. Perbedaan ini yang membuat produk bisa dipatuhi.</p>
+          <div class="why-grid">
+            <div class="why-list">
+              <div class="why">
+                <p class="why-k">UU PDP 27/2022</p>
+                <h3>Data keuangan = data pribadi sensitif</h3>
+                <p>NIK, NIM, nomor rekening, dan nominal tidak boleh masuk ledger publik. Satu hash tidak membocorkan isi batch.</p>
+              </div>
+              <div class="why">
+                <p class="why-k">Right to erasure</p>
+                <h3>Immutability vs hak penghapusan</h3>
+                <p>Data yang tidak bisa dihapus adalah compliance trap, bukan fitur. Hash-only tetap tamper-evident tanpa menyimpan PII.</p>
+              </div>
+              <div class="why">
+                <p class="why-k">Due process</p>
+                <h3>Temuan bisa salah</h3>
+                <p>Tuduhan on-chain tidak bisa ditarik. Karena itu temuan dan status salah deteksi tidak pernah menyentuh chain.</p>
+              </div>
+            </div>
+            <aside class="chain">
+              <p class="chain-k">Yang benar-benar kami anchor</p>
+              <div class="formula">
+                <span class="box">sha256(baris batch)</span>
+                <span class="op">→</span>
+                <span class="box">batch hash</span>
+                <span class="op">→</span>
+                <span class="box">Memo(Solana devnet)</span>
+              </div>
+              <ul>
+                <li>Hanya sidik jari batch. Nol PII on-chain.</li>
+                <li>Temuan, nama, rekening, nominal tidak pernah on-chain.</li>
+                <li>Verifikasi: hitung ulang hash dari data, bandingkan dengan memo.</li>
+                <li>Demo memakai devnet. Produksi bisa chain-agnostic.</li>
+              </ul>
+              <p class="chain-caveat">Hari ini: satu hash per batch. Merkle proof per record ada di roadmap, bukan klaim demo.</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 ------------------------------------------------------------
+           SPEAKER: Arsitektur sesederhana mungkin. Satu binary Go.
+           Tidak ada ML, Redis, atau layanan eksternal di jalur demo.
+      -->
+      <section class="slide" data-screen-label="06 Architecture">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Arsitektur</span>
+          <span class="idx">06 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Satu binary Go. Offline-first.</h2>
+          <div class="arch">
+            <div class="node">
+              <p class="node-k">Frontend</p>
+              <p class="node-t">Preact + Vite</p>
+              <p class="node-d">Dashboard · temuan · panel bukti · bukti batch</p>
+            </div>
+            <div class="arrow"><span class="lbl">/api</span><span class="line"></span></div>
+            <div class="node core">
+              <p class="node-k">Core API</p>
+              <p class="node-t">Go :8080</p>
+              <div class="chips">
+                <span>R1-R4 + scorer</span>
+                <span>lifecycle + event</span>
+                <span>batch receipt</span>
+                <span>auth</span>
+              </div>
+            </div>
+            <div class="arrow"><span class="lbl">GORM</span><span class="line"></span></div>
+            <div class="node">
+              <p class="node-k">Data</p>
+              <p class="node-t">Postgres 16</p>
+              <p class="node-d">students · accounts · disbursements · findings · events</p>
+            </div>
+          </div>
+          <div class="anchor-row">
+            <span class="dash"></span>
+            <span class="anchor-node"><b>Solana devnet</b> · Memo(hash) · opsional, manual, tidak di jalur kritis</span>
+          </div>
+          <div class="num-strip">
+            <div class="num"><div class="n">215</div><div class="c">record sintetis berlabel</div></div>
+            <div class="num"><div class="n">15</div><div class="c">temuan</div></div>
+            <div class="num"><div class="n">~30 ms</div><div class="c">waktu deteksi</div></div>
+            <div class="num"><div class="n">4</div><div class="c">aturan deterministik</div></div>
+          </div>
+        </div>
+        <footer class="foot">
+          <p class="small" style="text-transform:none;letter-spacing:0.02em;font-family:var(--font);font-size:15px;color:var(--muted);">
+            Tanpa ML, tanpa Redis, tanpa panggilan jaringan di jalur demo. Setiap komponen tambahan adalah titik gagal di panggung.
+          </p>
+          <p class="source">Integrasi produksi: impor CSV/REST dari sistem kampus. Auth Supabase JWT; dev header hanya untuk demo.</p>
+        </footer>
+      </section>
+
+      <!-- 07 ------------------------------------------------------------
+           SPEAKER: Yang tidak kami bangun sama pentingnya. Ini pembeda
+           dari tim fraud lain yang mengintip mutasi rekening.
+      -->
+      <section class="slide" data-screen-label="07 Privacy & ethics">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Privasi &amp; etika</span>
+          <span class="idx">07 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Yang tidak kami bangun <span class="accent">sama pentingnya.</span></h2>
+          <div class="eth-grid">
+            <article class="eth">
+              <p class="eth-k">Tidak</p>
+              <h3>Mengintip mutasi rekening</h3>
+              <p>UU Perbankan Pasal 40. Kampus tidak punya data merchant. Produk yang tidak bisa dioperasikan bukan produk.</p>
+            </article>
+            <article class="eth">
+              <p class="eth-k">Tidak</p>
+              <h3>Memblokir otomatis</h3>
+              <p>Temuan masuk antrean review. Tidak ada aksi otomatis terhadap pencairan atau rekening mahasiswa.</p>
+            </article>
+            <article class="eth">
+              <p class="eth-k">Tidak</p>
+              <h3>Memakai fitur demografis</h3>
+              <p>Empat aturan deterministik. Threshold konservatif: salah tuduh lebih mahal daripada telat menemukan.</p>
+            </article>
+            <article class="eth">
+              <p class="eth-k">Tidak</p>
+              <h3>Menuduh permanen</h3>
+              <p><code>salah_deteksi</code> adalah status kelas satu. Setiap transisi punya event: aktor, waktu, catatan.</p>
+            </article>
+          </div>
+        </div>
+        <footer class="foot eth-foot">
+          <p>Data minimization: hanya data penyaluran yang sudah dipegang kampus. Bukan profil perilaku mahasiswa.</p>
+          <p>Roadmap privasi: portal transparansi + consent eksplisit yang bisa dicabut. Bukan klaim demo hari ini.</p>
+        </footer>
+      </section>
+
+      <!-- 08 ------------------------------------------------------------
+           SPEAKER: Tutup dengan dampak dan satu kalimat yang diingat
+           juri. Jangan lupa ask: pilot satu kampus, satu batch, 30 hari.
+      -->
+      <section class="slide" data-screen-label="08 Impact">
+        <header class="topline">
+          <span class="brand"><i class="dot"></i> Dampak</span>
+          <span class="idx">08 / 08</span>
+        </header>
+        <div class="main">
+          <h2 class="h2">Uang negara sampai. <span class="accent">Mahasiswa berhak tidak dikorbankan.</span></h2>
+          <div class="impact">
+            <article class="who">
+              <p class="who-k">Kemendikbud / KIP-K</p>
+              <h3>Bukti per batch, sinyal dini</h3>
+              <p>Akuntabilitas anggaran tanpa menambah kewenangan baru.</p>
+            </article>
+            <article class="who">
+              <p class="who-k">Kampus</p>
+              <h3>Antrean verifikasi ber-bukti</h3>
+              <p>Bukan sampling buta. Setiap baris punya alasan dan status.</p>
+            </article>
+            <article class="who">
+              <p class="who-k">Mahasiswa</p>
+              <h3>Penerima sah terlindungi</h3>
+              <p>Koreksi tercatat, bukan stigma. Dana tidak pernah diblokir otomatis.</p>
+            </article>
+            <article class="who">
+              <p class="who-k">Bank / regulator</p>
+              <h3>Tanpa data mutasi</h3>
+              <p>Integrasi CSV/REST. Audit hash-only, siap diperiksa.</p>
+            </article>
+          </div>
+          <div class="roadmap">
+            <p class="roadmap-k">Roadmap</p>
+            <p><b>Feed bank (SNAP)</b> · <b>Isolation Forest</b> · <b>Merkle proof per record</b> · <b>Portal consent mahasiswa</b></p>
+          </div>
+          <p class="closing">Sistem tidak menuduh. Sistem menunjukkan bukti. <span class="accent">Manusia yang memutuskan.</span></p>
+        </div>
+        <footer class="foot">
+          <p class="ask">Pilot: satu kampus · satu batch · 30 hari</p>
+          <p class="source">Keputusan tercatat. Temuan tidak on-chain. Data pribadi tidak keluar dari sistem kampus.</p>
+        </footer>
+      </section>
+
+    </div>
+  </div>
+
+  <nav class="deck-counter" role="navigation" aria-label="Deck navigation">
+    <button type="button" id="deck-prev" aria-label="Previous slide">‹</button>
+    <span class="deck-count"><span id="deck-cur">01</span> <span class="total">/ <span id="deck-total">01</span></span></span>
+    <button type="button" id="deck-next" aria-label="Next slide">›</button>
+  </nav>
+
+  <script>
+    (function () {
+      var stage = document.getElementById('deck-stage');
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      var prev = document.getElementById('deck-prev');
+      var next = document.getElementById('deck-next');
+      var cur = document.getElementById('deck-cur');
+      var total = document.getElementById('deck-total');
+      var STORE = 'integra-pitch:' + (location.pathname || '/');
+      var idx = 0;
+
+      function fit() {
+        var sw = window.innerWidth;
+        var sh = window.innerHeight;
+        var pad = 32;
+        var s = Math.min((sw - pad) / 1920, (sh - pad) / 1080);
+        if (!isFinite(s) || s <= 0) s = 1;
+        var tx = (sw - 1920 * s) / 2;
+        var ty = (sh - 1080 * s) / 2;
+        stage.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+      }
+
+      function pad2(n) { return (n < 10 ? '0' : '') + n; }
+      function paint() {
+        slides.forEach(function (el, i) { el.classList.toggle('active', i === idx); });
+        if (cur) cur.textContent = pad2(idx + 1);
+        if (total) total.textContent = pad2(slides.length);
+        if (prev) prev.toggleAttribute('disabled', idx <= 0);
+        if (next) next.toggleAttribute('disabled', idx >= slides.length - 1);
+      }
+      function go(i) {
+        idx = Math.max(0, Math.min(slides.length - 1, i));
+        paint();
+        try { localStorage.setItem(STORE, String(idx)); } catch (_) {}
+      }
+      function onKey(e) {
+        var t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(idx - 1); }
+        else if (e.key === 'Home' || String(e.key).toLowerCase() === 'r') { e.preventDefault(); go(0); }
+        else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+      }
+      window.addEventListener('keydown', onKey, true);
+      document.addEventListener('keydown', onKey, true);
+      if (prev) prev.addEventListener('click', function () { go(idx - 1); });
+      if (next) next.addEventListener('click', function () { go(idx + 1); });
+      document.addEventListener('click', function (e) {
+        if (e.defaultPrevented) return;
+        if (e.button !== undefined && e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+        var t = e.target;
+        while (t && t !== document.body && t !== document.documentElement) {
+          var tag = String(t.tagName || '').toUpperCase();
+          if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t.isContentEditable) return;
+          t = t.parentElement;
+        }
+        if (e.clientX < window.innerWidth / 2) go(idx - 1);
+        else go(idx + 1);
+      }, true);
+
+      document.body.setAttribute('tabindex', '-1');
+      document.body.style.outline = 'none';
+      function focusDeck() { try { window.focus(); document.body.focus({ preventScroll: true }); } catch (_) {} }
+      document.addEventListener('mousedown', focusDeck);
+      window.addEventListener('load', focusDeck);
+
+      try {
+        var saved = parseInt(localStorage.getItem(STORE) || '0', 10);
+        if (!isNaN(saved) && saved >= 0 && saved < slides.length) idx = saved;
+      } catch (_) {}
+
+      window.addEventListener('resize', fit);
+      fit();
+      paint();
+      focusDeck();
+    })();
+  </script>
+</body>
+</html>
